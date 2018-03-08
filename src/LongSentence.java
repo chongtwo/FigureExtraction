@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class LongSentence {
 
     ArrayList<ShortSentence> shortSentences = new ArrayList<>();
-    String content;
+    private String content;
     int numOfShortSentences;
 
     public LongSentence(String value){
