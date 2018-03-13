@@ -1,49 +1,29 @@
-import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShortSentence {
 
-    static Dictionary dictionary = new Dictionary() {
-        @Override
-        public int size() {
-            return 0;
-        }
+    static HashMap<String, String> semanticDictionary;
 
-        @Override
-        public boolean isEmpty() {
-            return false;
+    /**
+     * 导入字典，生成map
+     * @param path
+     */
+    static void intializeDictionary(String path){
+        XlsOperator xlsOperator = new XlsOperator();
+        semanticDictionary = xlsOperator.readXls(path);
+        for(Map.Entry<String, String> entry : semanticDictionary.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
         }
+    }
 
-        @Override
-        public Enumeration keys() {
-            return null;
-        }
-
-        @Override
-        public Enumeration elements() {
-            return null;
-        }
-
-        @Override
-        public Object get(Object key) {
-            return null;
-        }
-
-        @Override
-        public Object put(Object key, Object value) {
-            return null;
-        }
-
-        @Override
-        public Object remove(Object key) {
-            return null;
-        }
-    };
     static String rule;
 
     String content;
     String primaryLocation;
     String figure;
+
 
     public void setContent(String value){
         content = value;
