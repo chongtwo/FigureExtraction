@@ -1,0 +1,7 @@
+//不能用记事本打开，否则会有BOM使得匹配不到
+(Descriptor#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
+(SpecificLocation#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
+(DiagnosisSuffix#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
+(Descriptor#[0-9]+#)(Change#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
+(DiagnosisSuffix#[0-9]+#)(DescriptorSuffix#[0-9]+#)
+(Descriptor#[0-9]+#)(DescriptorSuffix#[0-9]+#)
