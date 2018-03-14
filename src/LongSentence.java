@@ -15,7 +15,6 @@ public class LongSentence {
                 .replace("，", "，\n")
                 .replace("；","；\n")
                 .replace(",", ",\n")
-                .replace(".",".\n")
                 .replace(";",";\n");
         String[] shortSentenceList = content.split("\n");
         numOfShortSentences = shortSentenceList.length;
