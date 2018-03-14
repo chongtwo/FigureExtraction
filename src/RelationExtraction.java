@@ -46,8 +46,8 @@ public class RelationExtraction {
         }
         specificLocation = "";//清空
         region = "";
-//传入string,用一个map实现string与变量名之间的关系
-
+//可以考虑终极mat的value是一个list或者ArrayList
+        //将匹配剩下的词归类
         for(int i = 0 ; i < numOfFind; i++) {
             for (Map.Entry<String, String> entry : matchedDictionary.entrySet()) {
                 if (entry.getKey().contains("SpecificLocation")) {
@@ -72,6 +72,7 @@ public class RelationExtraction {
                     possibility += entry.getValue();
                 }
             }
+            //将归完类的词填到终极map里
             if (numMap.get(i).containsKey("SpecificLocation")){
                 //如果原Map已有该key，就取出该key中的value，加上新的value，再放回该key中
                 numMap.get(i).put("SpecificLocation", numMap.get(i).get("SpecificLocation")+ specificLocation);
