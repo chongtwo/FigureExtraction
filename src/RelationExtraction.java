@@ -73,7 +73,7 @@ public class RelationExtraction {
                 possibility += entry.getValue();
             }
         }
-            //将归类后的词放入对象中
+        //将归类后的词放入对象中
         int j = 0;
         do{
             numMap.get(j).specificLocation = specificLocation;
@@ -85,15 +85,6 @@ public class RelationExtraction {
             numMap.get(j).possibility = possibility;
             j++;
         }while( j < numOfFind );
-//        for(int i = 0; i <= numOfFind ; i++){ //<=的=表示当numOfFind =0 时，即句子中没有主干部位
-//            numMap.get(i).specificLocation = specificLocation;
-//            numMap.get(i).region = region;
-//            numMap.get(i).descriptor = descriptor;
-//            numMap.get(i).diagnosis = diagnosis;
-//            numMap.get(i).quantifier = quantifier;
-//            numMap.get(i).change = change;
-//            numMap.get(i).possibility = possibility;
-//        }
 
         for(Map.Entry<Integer, StructruedEntry> entry : numMap.entrySet()){
             Field[] field = entry.getValue().getClass().getDeclaredFields();//获取实体的类的所有属性，返回Field数组

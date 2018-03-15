@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class ShortSentence {
 
     static String[] combineRule;
-    private String content;
+    public String content;
     String semanticSentence;
     String primaryLocation = "";
     String descriptor = "";
@@ -34,28 +34,12 @@ public class ShortSentence {
         semanticSentence = content;
     }
 
-    public void match(){
-        int numOfMatched = 0;
-        //通过字典匹配中文字
-        StringBuffer stringBuffer = new StringBuffer(content);
-        for(Map.Entry<String, String> entry : semanticDictionary.entrySet()){
-//            if (semanticSentence.contains(entry.getKey())) {
-//                semanticSentence = semanticSentence.replace(entry.getKey(), entry.getValue() + "#" + String.valueOf(numOfMatched) + "#");
-//                //建立反向字典
-//                matchedDictionary.put(entry.getValue() + "#" + String.valueOf(numOfMatched) + "#", entry.getKey());
-//                numOfMatched++;
-//            }
-            Pattern p = Pattern.compile(entry.getKey());
-            Matcher m = p.matcher(stringBuffer);
+    public void match(){ //把MM单独成类的好处是：换match方法时更方便
+        MatchResult matchResult = MM.maxMatching(content);
+        semanticSentence = matchResult.semanticSentence;
+        matchedDictionary = matchResult.matchedDictionary;
 
-            while (m.find()){
-                matchedDictionary.put(entry.getValue()+ "#" + String.valueOf(numOfMatched) + "#", entry.getKey());
-                stringBuffer.replace(m.start(), m.end(), entry.getValue()+ "#" + String.valueOf(numOfMatched) + "#");
-                numOfMatched++;
-                m = p.matcher(stringBuffer);
-            }
-        }
-        semanticSentence = stringBuffer.toString();
+
 
 //        //打印反向字典
 //        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
@@ -117,4 +101,5 @@ public class ShortSentence {
 //            System.out.println(entry.getKey()+":"+ entry.getValue());
 //        }
     }
+
 }
