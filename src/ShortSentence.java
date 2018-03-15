@@ -113,8 +113,8 @@ public class ShortSentence {
 
             }
         }
-        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
-            System.out.println(entry.getKey()+":"+ entry.getValue());
-        }
+//        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
+//            System.out.println(entry.getKey()+":"+ entry.getValue());
+//        }
     }
 }
