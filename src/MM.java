@@ -47,7 +47,7 @@ public class MM {
                     if (line[0].equals(subStr)){
                         result.append(subStr).append("/");
                         semanticResult.append(line[1]+ "#" + String.valueOf(numOfMatched) + "#");
-                        matchedDictionary.put(subStr, line[1]+ "#" + String.valueOf(numOfMatched) + "#");
+                        matchedDictionary.put(line[1]+ "#" + String.valueOf(numOfMatched) + "#", subStr);
                         numOfMatched++;
                         curIndex+=len;
                         len=MAXLEN+1;//因为即便匹配成功，也要执行下面的len--，所以还原len的时候要比MAXLEN大1
