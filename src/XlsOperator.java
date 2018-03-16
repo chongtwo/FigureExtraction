@@ -18,6 +18,7 @@ import java.util.*;
 
 
 public class XlsOperator {
+    String string;
 
     public static void main(String[] args) throws IOException {
         String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
