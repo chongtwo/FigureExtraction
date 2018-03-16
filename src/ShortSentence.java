@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class ShortSentence {
 
     static String[] combineRule;
-    public String content;
+    public String content ;
     String semanticSentence;
     public HashMap<String, String> matchedDictionary = new HashMap<String, String>();
 
