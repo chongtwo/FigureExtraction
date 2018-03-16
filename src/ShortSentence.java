@@ -1,3 +1,4 @@
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -10,24 +11,8 @@ public class ShortSentence {
     static String[] combineRule;
     public String content;
     String semanticSentence;
-    String primaryLocation = "";
-    String descriptor = "";
-    String figure = "";
-    static HashMap<String, String> semanticDictionary;
     public HashMap<String, String> matchedDictionary = new HashMap<String, String>();
 
-    /**
-     * 导入字典，生成map
-     * @param path
-     */
-    static void intializeDictionary(String path){
-        XlsOperator xlsOperator = new XlsOperator();
-        semanticDictionary = xlsOperator.readXls(path);
-        //打印semanticDictionary
-//        for(Map.Entry<String, String> entry : semanticDictionary.entrySet()) {
-//            System.out.println(entry.getKey() + " : " + entry.getValue());
-//        }
-    }
 
     public void setContent(String value){
         content = value;
@@ -38,9 +23,6 @@ public class ShortSentence {
         MatchResult matchResult = MM.maxMatching(content);
         semanticSentence = matchResult.semanticSentence;
         matchedDictionary = matchResult.matchedDictionary;
-
-
-
 //        //打印反向字典
 //        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
 //            System.out.println(entry.getKey() + " : " + entry.getValue());

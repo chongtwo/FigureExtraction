@@ -22,6 +22,8 @@ public class MM {
 
 
     public static MatchResult maxMatching(String sentence){
+        len = MAXLEN;
+        curIndex = 0;
         MatchResult matchResult = new MatchResult();
         StringBuilder semanticResult = new StringBuilder();
         HashMap<String, String> matchedDictionary = new HashMap<String, String>();

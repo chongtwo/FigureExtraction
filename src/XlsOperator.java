@@ -13,56 +13,56 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 
 public class XlsOperator {
-//    public static void main(String[] args){
-//        XlsOperator test = new XlsOperator();
-//        String xlsxText = test.readXlsx("C:\\Users\\W\\Desktop\\新建 Microsoft Excel 工作表.xlsx");
-//        System.out.println(xlsxText);
-//    }
+
+    public static void main(String[] args) throws IOException {
+        String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
+        XlsOperator test = new XlsOperator();
+//        HashMap<Integer, ArrayList<String>> xlsText = XlsOperator.readXls("C:\\Users\\W\\Desktop\\新建 Microsoft Excel 97-2003 工作表.xls");
+        ArrayList<String> cellValue = test.readXls(path, 0, 0);
+        System.out.println(cellValue);
+
+//        ArrayList<String> xlsText = XlsOperator.readXls("C:\\Users\\W\\Desktop\\新建 Microsoft Excel 97-2003 工作表.xls", 0, columnlist);
+//        System.out.println(xlsText);
+    }
 
     /**
      * 读xls
      * @param path
-     * @return
+     * @return HashMap,key = 行号, value = 每列值的ArrayList
      */
-    public static HashMap<String, String> readXls(String path)
+    public static HashMap<Integer, ArrayList<String>> readXls(String path)
     {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<Integer, ArrayList<String>> map = new HashMap<>();
+        ArrayList<String> cellValue = new ArrayList<>();
         try
         {
             FileInputStream is =  new FileInputStream(path);
-            HSSFWorkbook excel=new HSSFWorkbook(is);
-            //获取第一个sheet  
+            HSSFWorkbook excel = new HSSFWorkbook(is);
+            //获取第一个sheet
             HSSFSheet sheet0=excel.getSheetAt(0);
+            int numOfRow = 0;
             //行读取循环
             for (Iterator rowIterator = sheet0.iterator(); rowIterator.hasNext();)
             {
-                HSSFRow row=(HSSFRow) rowIterator.next();
-                String key = "";
-                String value = "";
+                HSSFRow row = (HSSFRow) rowIterator.next();
+                map.put(numOfRow, new ArrayList<>());
                 //列读取循环
-                for (Iterator iterator=row.cellIterator();iterator.hasNext();)
+                for (Iterator iterator = row.cellIterator();iterator.hasNext();)
                 {
                     HSSFCell cell=(HSSFCell) iterator.next();
-                    if (cell.getColumnIndex() == 0){
-                        key = cell.getStringCellValue();
-                    }
-                    if(cell.getColumnIndex() == 1){
-                        value = cell.getStringCellValue();
-                    }
+                    map.get(numOfRow).add(cell.getStringCellValue());
                 }
-                map.put(key, value);
+                numOfRow++;
             }
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block  
+            // TODO Auto-generated catch block
             e.printStackTrace();
             //log.warn(e);
         }
@@ -70,8 +70,43 @@ public class XlsOperator {
 //            System.out.println(entry.getKey() + " : " + entry.getValue());
 //        }
         return map;
+    }
+
+    /**
+     * readXls重载
+     * @param sheetIndex
+     * @param columnIndex
+     * @return
+     */
+    public ArrayList<String> readXls(String path, int sheetIndex, int columnIndex) throws IOException {
+        FileInputStream is = new FileInputStream(path);
+        HSSFWorkbook excel = new HSSFWorkbook(is);
+        ArrayList<String> list = new ArrayList<>();
+        try{
+            //获取第sheetIndex个sheet
+            HSSFSheet sheet = excel.getSheetAt(sheetIndex);
+
+
+            //行读取循环
+            for (Iterator rowIterator = sheet.iterator(); rowIterator.hasNext();)
+            {
+                HSSFRow row = (HSSFRow) rowIterator.next();
+                //读取固定列
+                HSSFCell cell = (HSSFCell) row.getCell(columnIndex);
+                list.add(cell.getStringCellValue());
+
+            }
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            //log.warn(e);
+        }
+        return list;
 
     }
+
 
     /**
      * 将List集合数据写入xls文件
@@ -113,6 +148,8 @@ public class XlsOperator {
         }
 
     }
+
+
 
     /**
      * 读xlsx

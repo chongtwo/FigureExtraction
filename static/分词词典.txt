@@ -23,7 +23,6 @@
 类圆形	Descriptor
 毛刺	Descriptor
 弥漫	Descriptor
-弥漫	Descriptor
 密度	Descriptor
 囊状	Descriptor
 牵拉	Descriptor

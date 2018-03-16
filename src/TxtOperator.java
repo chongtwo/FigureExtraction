@@ -2,8 +2,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class TxtOperator {
+
     static ArrayList<String> readTxt(String path){
-        ArrayList<String> ruleList = new ArrayList<String>();
+        ArrayList<String> lineList = new ArrayList<String>();
         try{
             File file = new File(path);
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -12,13 +13,13 @@ public class TxtOperator {
             String line = "";
             line = bufferedReader.readLine();
             while (line != null){
-                ruleList.add(line);
+                lineList.add(line);
                 line = bufferedReader.readLine();
             }
         }catch ( Exception e){
             e.printStackTrace();
         }
-        return ruleList;
+        return lineList;
     }
 
     static void writeTxt(String path, String content) {
