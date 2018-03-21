@@ -29,7 +29,7 @@ public class ShortSentence {
 //        }
 
         //匹配阿拉伯数字
-        Pattern quantifierPattern = Pattern.compile("(长径约|直径约|大小约为|大小约)(\\d+(?:\\.\\d+)?)(cm|mm)");
+        Pattern quantifierPattern = Pattern.compile("(长径|直径|大小)(?:约)?(?:为)?(\\d+(?:\\.\\d+)?)(cm|mm)");
         Matcher m = quantifierPattern.matcher(semanticSentence);
         if (m.find()){
             for (int i = 1 ; i <= m.groupCount(); i++){

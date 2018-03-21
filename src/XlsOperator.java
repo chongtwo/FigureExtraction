@@ -9,10 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -21,20 +18,21 @@ public class XlsOperator {
     String string;
 
     public static void main(String[] args) throws IOException {
-        String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
+//        String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
+        String path = "C:/Users/W/Desktop/新建 Microsoft Excel 工作表.xlsx";
         XlsOperator test = new XlsOperator();
-//        HashMap<Integer, ArrayList<String>> xlsText = XlsOperator.readXls("C:\\Users\\W\\Desktop\\新建 Microsoft Excel 97-2003 工作表.xls");
-        ArrayList<String> cellValue = test.readXls(path, 0, 0);
-        System.out.println(cellValue);
+        HashMap<Integer, ArrayList<String>> xlsText = XlsOperator.readXls(path);
+//        ArrayList<String> cellValue = test.readXls(path, 0, 0);
+//        System.out.println(cellValue);
 
 //        ArrayList<String> xlsText = XlsOperator.readXls("C:\\Users\\W\\Desktop\\新建 Microsoft Excel 97-2003 工作表.xls", 0, columnlist);
-//        System.out.println(xlsText);
+        System.out.println(xlsText);
     }
 
     /**
-     * 读xls
+     * 读xls或xlsx，按行读每一列的值
      * @param path
-     * @return HashMap,key = 行号, value = 每列值的ArrayList
+     * @return HashMap,key = 行号, value = 该行每列值的ArrayList
      */
     public static HashMap<Integer, ArrayList<String>> readXls(String path)
     {
@@ -42,20 +40,28 @@ public class XlsOperator {
         ArrayList<String> cellValue = new ArrayList<>();
         try
         {
+//            File file = new File(path);
             FileInputStream is =  new FileInputStream(path);
-            HSSFWorkbook excel = new HSSFWorkbook(is);
+            Workbook excel = null;
+            if (path.endsWith("xls")){
+                excel = new HSSFWorkbook(is);
+            }else if(path.endsWith("xlsx"))
+            {
+                excel = new XSSFWorkbook(is);
+            }
+
             //获取第一个sheet
-            HSSFSheet sheet0=excel.getSheetAt(0);
+            Sheet sheet0=excel.getSheetAt(0);
             int numOfRow = 0;
             //行读取循环
             for (Iterator rowIterator = sheet0.iterator(); rowIterator.hasNext();)
             {
-                HSSFRow row = (HSSFRow) rowIterator.next();
+                Row row = (Row) rowIterator.next();
                 map.put(numOfRow, new ArrayList<>());
                 //列读取循环
                 for (Iterator iterator = row.cellIterator();iterator.hasNext();)
                 {
-                    HSSFCell cell=(HSSFCell) iterator.next();
+                    Cell cell=(Cell) iterator.next();
                     map.get(numOfRow).add(cell.getStringCellValue());
                 }
                 numOfRow++;
@@ -74,7 +80,7 @@ public class XlsOperator {
     }
 
     /**
-     * readXls重载
+     * readXls重载，
      * @param sheetIndex
      * @param columnIndex
      * @return
@@ -150,45 +156,6 @@ public class XlsOperator {
 
     }
 
-
-
-    /**
-     * 读xlsx
-     * @param path
-     * @return
-     */
-    public static String readXlsx(String path)
-    {
-        String text="";
-        try
-        {
-            OPCPackage pkg=OPCPackage.open(path);
-            XSSFWorkbook excel=new XSSFWorkbook(pkg);
-            //获取第一个sheet
-            XSSFSheet sheet0=excel.getSheetAt(0);
-            for (Iterator rowIterator=sheet0.iterator();rowIterator.hasNext();)
-            {
-                XSSFRow row=(XSSFRow) rowIterator.next();
-                for (Iterator iterator=row.cellIterator();iterator.hasNext();)
-                {
-                    XSSFCell cell=(XSSFCell) iterator.next();
-                    //根据单元的的类型 读取相应的结果
-                    if(cell.getCellType()==XSSFCell.CELL_TYPE_STRING) text+=cell.getStringCellValue()+"\t";
-                    else if(cell.getCellType()==XSSFCell.CELL_TYPE_NUMERIC) text+=cell.getNumericCellValue()+"\t";
-                    else if(cell.getCellType()==XSSFCell.CELL_TYPE_FORMULA) text+=cell.getCellFormula()+"\t";
-                }
-                text+="\n";
-            }
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            //log.warn(e);
-        }
-
-        return text;
-    }
 
     /**
      * 写xlsx文件
