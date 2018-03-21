@@ -89,7 +89,7 @@
 胸膜	PrimaryLocation
 血管	PrimaryLocation
 右肺	PrimaryLocation
-右肾	PrimaryLocation
+肾	PrimaryLocation
 支气管	PrimaryLocation
 主动脉	PrimaryLocation
 纵隔	PrimaryLocation

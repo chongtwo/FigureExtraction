@@ -8,24 +8,24 @@ public class FigureExtraction
 
     public static void main(String[] args){
         FigureExtraction figureExtraction = new FigureExtraction();
-        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
-//        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺下叶近胸膜处见一钙化灶影");
+//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
+        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("扫描野左肾见一直径约1.6cm类圆形囊性低密度影，");
         figureExtraction.go(longSentenceList);
     }
 
 
     public void go(ArrayList<String> longSentencList){
         int numOfLong = 0;
-        for(String longS : longSentencList.subList(0,100)){
+        for(String longS : longSentencList.subList(0,1)){
             numOfLong++;
             int numOfShort = 0;
-            System.out.println(String.valueOf(numOfLong));
+            System.out.println(String.valueOf("长句编号：" + numOfLong));
             LongSentence longSentence = new LongSentence(longS);
             longSentence.segToShort();
             HashMap<Integer, StructruedEntry> numMap;
             for (ShortSentence ss : longSentence.shortSentences) {
                 numOfShort++;
-                System.out.println(numOfShort);
+                System.out.println("短句编号：" + numOfShort);
                 ss.match();
                 ss.combineWord();
                 numMap = RelationExtraction.relationExtract(ss.semanticSentence, ss.matchedDictionary);
