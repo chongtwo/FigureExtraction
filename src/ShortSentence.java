@@ -8,10 +8,9 @@ import java.util.regex.Pattern;
 
 public class ShortSentence {
 
-    static String[] combineRule;
     public String content ;
     String semanticSentence;
-    public HashMap<String, String> matchedDictionary = new HashMap<String, String>();
+    public HashMap<String, String> matchedDictionary = new HashMap<>();
 
 
     public void setContent(String value){
@@ -29,12 +28,17 @@ public class ShortSentence {
 //        }
 
         //匹配阿拉伯数字
-        Pattern quantifierPattern = Pattern.compile("(长径|直径|大小)(?:约)?(?:为)?(\\d+(?:\\.\\d+)?)(cm|mm)");
+        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>长径|直径|大小)(?:约)?(?:为)?(?<value>\\d+(?:\\.\\d+)?)(?<unit>cm|mm)");
         Matcher m = quantifierPattern.matcher(semanticSentence);
-        if (m.find()){
-            for (int i = 1 ; i <= m.groupCount(); i++){
-                System.out.println(m.group(i));
-            }
+        int numOfFind = 0;
+        while (m.find()){
+            matchedDictionary.put("measureLocation#"+String.valueOf(numOfFind)+"#",m.group("measureLocation"));
+            matchedDictionary.put("value#"+String.valueOf(numOfFind)+"#",m.group("value"));
+            matchedDictionary.put("unit#"+String.valueOf(numOfFind)+"#",m.group("unit"));
+            numOfFind++;
+//            for (int i = 1 ; i <= m.groupCount(); i++){
+//                System.out.println(m.group(i));
+//            }
         }
 //        System.out.println(content + ":" + semanticSentence);
     }

@@ -13,8 +13,9 @@ public class RelationExtraction {
     static String lastPrimaryLocation = "";
     static Pattern P = Pattern.compile("(PrimaryLocation#[0-9]+#)|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)(PrimaryLocation#[0-9]+#)");
 
-    public static HashMap<Integer, StructruedEntry> relationExtract(String semanticSentence, HashMap<String, String> matchedDictionary){
-        String primaryLocation = "";//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
+
+    public static HashMap<Integer, StructuredShortSentence> relationExtract(String semanticSentence, HashMap<String, String> matchedDictionary){
+        String primaryLocation = "";
         String specificLocation = "";
         String region = "";
         String descriptor = "";
@@ -22,26 +23,29 @@ public class RelationExtraction {
         String quantifier = "";
         String change = "";
         String possibility = "";
+        String measureLocation = "";
+        String value= "";
+        String unit = "";
         Matcher m = P.matcher(semanticSentence);
         int numOfFind = 0;
-        HashMap<Integer, StructruedEntry> numMap = new HashMap<Integer, StructruedEntry>();//用于记录有几个find
-        numMap.put(numOfFind, new StructruedEntry());//先初始化，避免m.find为空时(句子缺少主干部位时)的空指针，如果m.find不为空，numMap.put将会覆盖该条
+        HashMap<Integer, StructuredShortSentence> numMap = new HashMap<Integer, StructuredShortSentence>();//用于记录有几个find
+        numMap.put(numOfFind, new StructuredShortSentence());//先初始化，避免m.find为空时(句子缺少主干部位时)的空指针，如果m.find不为空，numMap.put将会覆盖该条
         numMap.get(numOfFind).primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
         while(m.find()){
-            primaryLocation = lastPrimaryLocation;//清空
+            primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
             specificLocation = "";
             region = "";
-            numMap.put(numOfFind, new StructruedEntry());
+            numMap.put(numOfFind, new StructuredShortSentence());
             for( int index = 1; index <= m.groupCount(); index++){
                 if(m.group(index)!= null){
                     if(m.group(index).contains("PrimaryLocation")){
                         primaryLocation = matchedDictionary.get(m.group(index))+ ",";
                     }
                     else if(m.group(index).contains("SpecificLocation")){
-                        specificLocation = m.group(index)+",";
+                        specificLocation = matchedDictionary.get(m.group(index))+",";
                     }
                     else if (m.group(index).contains("Region")){
-                        region = m.group(index)+",";
+                        region = matchedDictionary.get(m.group(index))+",";
                     }
                     matchedDictionary.remove(m.group(index));
                 }
@@ -78,6 +82,15 @@ public class RelationExtraction {
             else if (entry.getKey().contains("Possibility")){
                 possibility += entry.getValue()+",";
             }
+            else if (entry.getKey().contains("measureLocation")){
+                measureLocation += entry.getValue() + ",";
+            }
+            else if(entry.getKey().contains("value")){
+                value += entry.getValue() + ",";
+            }
+            else if (entry.getKey().contains("unit")){
+                unit += entry.getValue() + ",";
+            }
         }
         //将归类后的词放入对象中
         int j = 0;
@@ -89,6 +102,9 @@ public class RelationExtraction {
             numMap.get(j).quantifier += quantifier;
             numMap.get(j).change += change;
             numMap.get(j).possibility += possibility;
+            numMap.get(j).measureLocation += measureLocation;
+            numMap.get(j).value += value;
+            numMap.get(j).unit += unit;
             j++;
         }while( j < numOfFind );
         return numMap;

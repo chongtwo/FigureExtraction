@@ -1,4 +1,4 @@
-public class StructruedEntry {
+public class StructuredShortSentence {
     String primaryLocation = "";
     String specificLocation = "";
     String region = "";
@@ -7,4 +7,7 @@ public class StructruedEntry {
     String quantifier = "";
     String change = "";
     String possibility = "";
+    String measureLocation = "";
+    String value ="";
+    String unit="";
 }

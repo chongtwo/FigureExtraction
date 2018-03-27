@@ -4,6 +4,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -16,17 +17,23 @@ import java.util.*;
 
 public class XlsOperator {
     String string;
+    int rowIndex;
+    Workbook workbook = new XSSFWorkbook();
+    Sheet sheet = workbook.createSheet();
+//    Workbook workbook = new XSSFWorkbook();
+//    Sheet sheet = workbook.createSheet();
 
     public static void main(String[] args) throws IOException {
-//        String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
-        String path = "C:/Users/W/Desktop/新建 Microsoft Excel 工作表.xlsx";
+        String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
+//        String path = "C:/Users/W/Desktop/新建 Microsoft Excel 工作表.xlsx";
         XlsOperator test = new XlsOperator();
-        HashMap<Integer, ArrayList<String>> xlsText = XlsOperator.readXls(path);
-//        ArrayList<String> cellValue = test.readXls(path, 0, 0);
-//        System.out.println(cellValue);
-
-//        ArrayList<String> xlsText = XlsOperator.readXls("C:\\Users\\W\\Desktop\\新建 Microsoft Excel 97-2003 工作表.xls", 0, columnlist);
-        System.out.println(xlsText);
+//        HashMap<Integer, ArrayList<String>> xlsRead = XlsOperator.readXls(path);
+//        System.out.println(xlsRead);
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("a");
+        arrayList.add("b");
+        arrayList.add("c");
+        test.writeXls(path, arrayList);
     }
 
     /**
@@ -119,30 +126,15 @@ public class XlsOperator {
      * 将List集合数据写入xls文件
      * @param path
      */
-    public static void writeXls(String path, List list){
+    public void writeXls(String path, List list){
+
         System.out.println("开始写入文件>>>>>>>>>>>");
-        Workbook workbook = new HSSFWorkbook();
-        Sheet sheet = workbook.createSheet();
-        String[] excelTitle = new String[10]; //用于存放表头
-        int rowIndex = 0;
         try {
-            //写表头数据
-            Row titleRow = sheet.createRow(rowIndex);
-            for (int i = 0; i < excelTitle.length; i++) {
-                //创建表头单元格，填值
-                titleRow.createCell(i).setCellValue(excelTitle[i]);
-            }
-            System.out.println("表头写入完成>>>>>>>");
-            rowIndex++;
-            //循环写入主表数据
-            for (Iterator iterator = list.iterator(); iterator.hasNext(); ) {
-                Object listElement = iterator.next();
-                //create sheet row
-                Row row = sheet.createRow(rowIndex);
-                //create sheet column
-                Cell cell0 = row.createCell(0);
-                cell0.setCellValue("a");
-                rowIndex++;
+            Row row = sheet.createRow(rowIndex);
+            //将list内容按一行多列写入
+            for ( int i = 0; i < list.size(); i ++){
+                Cell cell = row.createCell(i);
+                cell.setCellValue((String)list.get(i));
             }
             System.out.println("主表数据写入完成>>>>>");
             FileOutputStream fos = new FileOutputStream(path);
@@ -153,7 +145,7 @@ public class XlsOperator {
         }catch(IOException e){
             e.printStackTrace();
         }
-
+        rowIndex++;
     }
 
 

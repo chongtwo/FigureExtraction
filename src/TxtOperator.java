@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class TxtOperator {
 
     static ArrayList<String> readTxt(String path){
-        ArrayList<String> lineList = new ArrayList<String>();
+        ArrayList<String> lineList = new ArrayList<>();
         try{
             File file = new File(path);
             FileInputStream fileInputStream = new FileInputStream(file);

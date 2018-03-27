@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class MM {
-    private static StringBuilder result=new StringBuilder(); //其实也不应该放在属性这里
-//    public static StringBuilder semanticResult = new StringBuilder();
-//    public static HashMap<String, String> matchedDictionary = new HashMap<String, String>();
+    private static StringBuilder result=new StringBuilder(); //存放分词结果，其实也不应该放在属性这里
     private static final int MAXLEN=4; //最大字符数
     private static int len=MAXLEN; //取词长度
     private static int curIndex=0; //当前下标
@@ -26,7 +24,7 @@ public class MM {
         curIndex = 0;
         MatchResult matchResult = new MatchResult();
         StringBuilder semanticResult = new StringBuilder();
-        HashMap<String, String> matchedDictionary = new HashMap<String, String>();
+        HashMap<String, String> matchedDictionary = new HashMap<>();
 
 
         int numOfMatched=0;
