@@ -10,8 +10,8 @@ public class FigureExtraction {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
-        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
-//        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("扫描野左肾见一直径约1.6cm类圆形囊性低密度影，");
+//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
+        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("直径分别为1.0、1.2cm。");
         figureExtraction.go(longSentenceList);
         long endTime = System.currentTimeMillis();
         System.out.println("用时:"+ (endTime-startTime) + "ms");

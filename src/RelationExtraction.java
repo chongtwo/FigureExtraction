@@ -82,13 +82,13 @@ public class RelationExtraction {
             else if (entry.getKey().contains("Possibility")){
                 possibility += entry.getValue()+",";
             }
-            else if (entry.getKey().contains("measureLocation")){
+            else if (entry.getKey().contains("MeasureLocation")){
                 measureLocation += entry.getValue() + ",";
             }
             else if(entry.getKey().contains("value")){
                 value += entry.getValue() + ",";
             }
-            else if (entry.getKey().contains("unit")){
+            else if (entry.getKey().contains("Unit")){
                 unit += entry.getValue() + ",";
             }
         }
