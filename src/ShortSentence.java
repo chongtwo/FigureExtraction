@@ -22,10 +22,6 @@ public class ShortSentence {
         MatchResult matchResult = MM.maxMatching(content);
         semanticSentence = matchResult.semanticSentence;
         matchedDictionary = matchResult.matchedDictionary;
-//        //打印反向字典
-//        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
-//            System.out.println(entry.getKey() + " : " + entry.getValue());
-//        }
 
         //匹配阿拉伯数字
         Pattern quantifierPattern = Pattern.compile("(?<measureLocation>长径|直径|大小)(?:约)?(?:为)?(?<value>\\d+(?:\\.\\d+)?)(?<unit>cm|mm)");
@@ -36,11 +32,7 @@ public class ShortSentence {
             matchedDictionary.put("value#"+String.valueOf(numOfFind)+"#",m.group("value"));
             matchedDictionary.put("unit#"+String.valueOf(numOfFind)+"#",m.group("unit"));
             numOfFind++;
-//            for (int i = 1 ; i <= m.groupCount(); i++){
-//                System.out.println(m.group(i));
-//            }
         }
-//        System.out.println(content + ":" + semanticSentence);
     }
 
 

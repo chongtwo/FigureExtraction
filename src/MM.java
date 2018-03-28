@@ -33,7 +33,7 @@ public class MM {
 
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(".\\static\\分词词典.txt"),"utf8"));
+                        new FileInputStream("D:\\1.放射报告结构化\\术语集\\术语集有语义2017.10.23改2018.03.27.txt"), "utf8"));
                 String subStr;//待匹配的字符串，类似滑动的窗口
                 if (curIndex+len>sentence.length()){//处理最后几个字
                     subStr=sentence.substring(curIndex,sentence.length());

@@ -8,15 +8,19 @@ import java.util.Map;
 public class FigureExtraction {
 
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
         ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
 //        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("扫描野左肾见一直径约1.6cm类圆形囊性低密度影，");
         figureExtraction.go(longSentenceList);
+        long endTime = System.currentTimeMillis();
+        System.out.println("用时:"+ (endTime-startTime) + "ms");
     }
 
 
     public void go(ArrayList<String> longSentenceList) {
         int numOfLong = 0;
+        ArrayList<ArrayList<String>> allList = new ArrayList<>();
         XlsOperator xlsOperator = new XlsOperator();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String excelPath = "./out/result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
@@ -70,7 +74,7 @@ public class FigureExtraction {
                     columnContent.add(se.value);
                     columnContent.add(se.unit);
 
-                    xlsOperator.writeXls(excelPath, columnContent);
+                    allList.add(columnContent);
                 }
 
 //                //打印关系抽取后的结果
@@ -87,6 +91,7 @@ public class FigureExtraction {
 //                }
             }
         }
+        xlsOperator.writeXls(excelPath, allList);
     }
 }
 

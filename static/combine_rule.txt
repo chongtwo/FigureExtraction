@@ -4,3 +4,4 @@
 (Descriptor#[0-9]+#)(Change#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
 (DiagnosisSuffix#[0-9]+#)(DescriptorSuffix#[0-9]+#)
 (Descriptor#[0-9]+#)(DescriptorSuffix#[0-9]+#)
+(Diagonsis#[0-9]+#)(DiagnosisSuffix#+[0-9]+#)

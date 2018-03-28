@@ -20,8 +20,6 @@ public class XlsOperator {
     int rowIndex;
     Workbook workbook = new XSSFWorkbook();
     Sheet sheet = workbook.createSheet();
-//    Workbook workbook = new XSSFWorkbook();
-//    Sheet sheet = workbook.createSheet();
 
     public static void main(String[] args) throws IOException {
         String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
@@ -126,6 +124,28 @@ public class XlsOperator {
      * 将List集合数据写入xls文件
      * @param path
      */
+    public void writeXls(String path, ArrayList<ArrayList<String>> list){
+
+        System.out.println("开始写入文件>>>>>>>>>>>");
+        try {
+            for (int i = 0; i < list.size();i++ ){
+                Row row = sheet.createRow(i+ rowIndex);
+                for (int j = 0; j <list.get(i).size(); j++){
+                    Cell cell = row.createCell(j);
+                    cell.setCellValue(list.get(i).get(j));
+                }
+            }
+            FileOutputStream fos = new FileOutputStream(path);
+            workbook.write(fos);
+            fos.close();
+            System.out.println("主表数据写入完成>>>>>");
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void writeXls(String path, List list){
 
         System.out.println("开始写入文件>>>>>>>>>>>");
@@ -136,10 +156,10 @@ public class XlsOperator {
                 Cell cell = row.createCell(i);
                 cell.setCellValue((String)list.get(i));
             }
-            System.out.println("主表数据写入完成>>>>>");
             FileOutputStream fos = new FileOutputStream(path);
             workbook.write(fos);
             fos.close();
+            System.out.println("主表数据写入完成>>>>>");
         }catch(FileNotFoundException e){
             e.printStackTrace();
         }catch(IOException e){
