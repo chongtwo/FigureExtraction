@@ -98,14 +98,23 @@ public class SemanticTypeCount{
             }
         }
         //匹配阿拉伯数字
-        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>长径|直径|大小)(?:约)?(?:为)?(?:：)?(?<value>\\d+(?:\\.\\d+)?)(?<unit>cm|mm)");
+        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)?(?:约)?(?:为)?(?<value>\\d+(?:\\.\\d+)?(?:×|x|、\\d+(?:\\.\\d+)?)?(?:×|x\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)");
         Matcher m = quantifierPattern.matcher(semanticResult);
-
+        int numOfFind = 0;
         while (m.find()){
-            semanticResult = semanticResult.replace(m.group("measureLocation"),"measureLocation" );
             semanticResult = semanticResult.replace(m.group("value"), "value");
-            semanticResult = semanticResult.replace(m.group("unit"), "unit");
         }
+
+
+        //匹配阿拉伯数字
+//        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>长径|直径|大小)(?:约)?(?:为)?(?:：)?(?<value>\\d+(?:\\.\\d+)?)(?<unit>cm|mm)");
+//        Matcher m = quantifierPattern.matcher(semanticResult);
+//
+//        while (m.find()){
+//            semanticResult = semanticResult.replace(m.group("measureLocation"),"measureLocation" );
+//            semanticResult = semanticResult.replace(m.group("value"), "value");
+//            semanticResult = semanticResult.replace(m.group("unit"), "unit");
+//        }
     }
     public void dedup(){
         if (distinctSemanticList.size() == 0){

@@ -24,7 +24,7 @@ public class ShortSentence {
         matchedDictionary = matchResult.matchedDictionary;
 
         //匹配阿拉伯数字
-        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)?(?:约)?(?:为)?(?<value>\\d+(?:\\.\\d+)?(?:×|x|、\\d+(?:\\.\\d+)?)?(?:×|x\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)");
+        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)?(?:约)?(?:为)?(?<value>\\d+(?:\\.\\d+)?(?:×|x|、|-\\d+(?:\\.\\d+)?)?(?:×|x|、|-\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)");
         Matcher m = quantifierPattern.matcher(semanticSentence);
         int numOfFind = 0;
         while (m.find()){
@@ -45,6 +45,7 @@ public class ShortSentence {
         rules = TxtOperator.readTxt(ruleFilePath);
         //把rules中的每条rulecomplie好,放到另一个ArrayList中
         for (String r : rules) {
+            r = r.split("/")[0];
             Pattern p = Pattern.compile(r);
             patterns.add(p);
         }
@@ -53,21 +54,21 @@ public class ShortSentence {
             Matcher m = p.matcher(semanticSentence);
             while(m.find()){  //m.find()是一个迭代器，若一个句子中对同一个pattern匹配到多个，它会自行迭代
                      String combine = "";
-                     if ((patterns.indexOf(p) == 0)|(patterns.indexOf(p) ==1)|(patterns.indexOf(p) ==2)){
+                     if ((patterns.indexOf(p) == 0)|(patterns.indexOf(p) ==1)|(patterns.indexOf(p) ==2)|(patterns.indexOf(p) ==3)|(patterns.indexOf(p) ==4)){
                         combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
                         matchedDictionary.put("Diagnosis$"+ String.valueOf(numOfCombine) + "$",combine);
                         matchedDictionary.remove(m.group(1));
                         matchedDictionary.remove(m.group(2));
                         }
-                     else if (patterns.indexOf(p) == 3){
+                     else if (patterns.indexOf(p) == 5){
                         combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(3));
                         matchedDictionary.put("Diagnosis$" + String.valueOf(numOfCombine) + "$", combine);
                         matchedDictionary.remove(m.group(1));
                         matchedDictionary.remove(m.group(3));
                      }
-                     else if((patterns.indexOf(p) == 4)|(patterns.indexOf(p) == 5)){
+                     else if((patterns.indexOf(p) == 6)|(patterns.indexOf(p) == 7)){
                          combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-                         matchedDictionary.put("Diagnosis$" + String.valueOf(numOfCombine) + "$", combine);
+                         matchedDictionary.put("Descriptor$" + String.valueOf(numOfCombine) + "$", combine);
                          matchedDictionary.remove(m.group(1));
                          matchedDictionary.remove(m.group(2));
                         }

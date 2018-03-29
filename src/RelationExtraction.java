@@ -28,7 +28,7 @@ public class RelationExtraction {
         String unit = "";
         Matcher m = P.matcher(semanticSentence);
         int numOfFind = 0;
-        HashMap<Integer, StructuredShortSentence> numMap = new HashMap<Integer, StructuredShortSentence>();//用于记录有几个find
+        HashMap<Integer, StructuredShortSentence> numMap = new HashMap<>();//用于记录有几个find
         numMap.put(numOfFind, new StructuredShortSentence());//先初始化，避免m.find为空时(句子缺少主干部位时)的空指针，如果m.find不为空，numMap.put将会覆盖该条
         numMap.get(numOfFind).primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
         while(m.find()){

@@ -11,7 +11,8 @@ public class FigureExtraction {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
 //        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
-        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("直径分别为1.0、1.2cm。");
+        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\distinctSentence2018-03-28-14-37-41.txt");
+//        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺下叶可见多发结节状高密度影，");
         figureExtraction.go(longSentenceList);
         long endTime = System.currentTimeMillis();
         System.out.println("用时:"+ (endTime-startTime) + "ms");
@@ -23,7 +24,8 @@ public class FigureExtraction {
         ArrayList<ArrayList<String>> allList = new ArrayList<>();
         XlsOperator xlsOperator = new XlsOperator();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String excelPath = "./out/result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
+//        String excelPath = "./out/result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
+        String excelPath = "./out/distinctresult"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
         //写入表头
         ArrayList<String> columnName = new ArrayList<>();
         columnName.add("原句");

@@ -1,7 +1,8 @@
-(Descriptor#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
-(SpecificLocation#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
-(DiagnosisSuffix#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
-(Descriptor#[0-9]+#)(Change#[0-9]+#)(DiagnosisSuffix#[0-9]+#)
-(DiagnosisSuffix#[0-9]+#)(DescriptorSuffix#[0-9]+#)
-(Descriptor#[0-9]+#)(DescriptorSuffix#[0-9]+#)
-(Diagonsis#[0-9]+#)(DiagnosisSuffix#+[0-9]+#)
+(Descriptor#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/密度 影--> 诊断
+(SpecificLocation#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/淋巴结 影--> 诊断
+(Diagnosis#[0-9]+#)(DiagnosisSuffix#+[0-9]+#)/结节 影--> 诊断
+(SpecificLocation#[0-9]+#)(LocationSuffix#[0-9]+#)/肺纹理 区--> 诊断
+(Descriptor#[0-9]+#)(LocationSuffix#[0-9]+#)/透光 区 低密度 区 --> 诊断
+(Descriptor#[0-9]+#)(Change#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/密度 增高 影--> 诊断
+(Descriptor#[0-9]+#)(DescriptorSuffix#[0-9]+#)/条絮 样--> 性状
+(Diagnosis#[0-9]+#)(DescriptorSuffix#[0-9]+#)/结节 状-->性状
