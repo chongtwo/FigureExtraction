@@ -24,7 +24,7 @@ public class ShortSentence {
         matchedDictionary = matchResult.matchedDictionary;
 
         //匹配阿拉伯数字
-        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)?(?:约)?(?:为)?(?<value>\\d+(?:\\.\\d+)?(?:×|x|、|-\\d+(?:\\.\\d+)?)?(?:×|x|、|-\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)");
+        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)?(?:约)?(?:为)?(?<value>(?:-)?\\d+(?:\\.\\d+)?(?:(x|×|、|~|-)\\d+(?:\\.\\d+)?)?(?:(x|×|、|~)\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)");
         Matcher m = quantifierPattern.matcher(semanticSentence);
         int numOfFind = 0;
         while (m.find()){

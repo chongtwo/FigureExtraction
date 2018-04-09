@@ -44,7 +44,7 @@ public class MM {
                 String string; //整句话
                 while ((string=br.readLine())!=null){ //br.readLine()每次读一个词
                     String[]  line=string.split("\t");
-                    if (line[0].equals(subStr)){
+                    if (line[0].equalsIgnoreCase(subStr)){
                         result.append(subStr).append("/");
                         semanticResult.append(line[1]+ "#" + String.valueOf(numOfMatched) + "#");
                         matchedDictionary.put(line[1]+ "#" + String.valueOf(numOfMatched) + "#", subStr);
