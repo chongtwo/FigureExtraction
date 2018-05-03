@@ -10,9 +10,9 @@ public class FigureExtraction {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
-        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
+//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
 //        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\distinctSentence2018-03-28-14-37-41.txt");
-//        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("大小约为2.9×2.1×1.8cm，大小约：3.4x3.5x2.8cm，直径约2-4mm，直径分别为1.0、1.2cm。");
+        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺上叶尖后段另见条索状密度增高影及点状高密度影，");
         figureExtraction.go(longSentenceList);
         long endTime = System.currentTimeMillis();
         System.out.println("用时:"+ (endTime-startTime) + "ms");
@@ -42,7 +42,7 @@ public class FigureExtraction {
         columnName.add("测量值");
         columnName.add("单位");
         xlsOperator.writeXls(excelPath, columnName);
-
+        RelationExtraction re = new RelationExtraction();
         int end = longSentenceList.size();
         for (String longS : longSentenceList.subList(0, end)) {
             numOfLong++;
@@ -56,7 +56,7 @@ public class FigureExtraction {
                 System.out.println("短句编号：" + numOfShort);
                 ss.match();
                 ss.combineWord();
-                numMap = RelationExtraction.relationExtract(ss.semanticSentence, ss.matchedDictionary);
+                numMap = re.relationExtract(ss.semanticSentence, ss.matchedDictionary);
                 ArrayList<String> columnContent = null;
 
                 for(Map.Entry<Integer, StructuredShortSentence> entry : numMap.entrySet()){

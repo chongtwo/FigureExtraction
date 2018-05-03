@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class TxtOperator {
 
-    static ArrayList<String> readTxt(String path){
+    public static ArrayList<String> readTxt(String path){
         ArrayList<String> lineList = new ArrayList<>();
         try{
             File file = new File(path);
