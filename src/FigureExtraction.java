@@ -11,8 +11,8 @@ public class FigureExtraction {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
 //        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
-//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\distinctSentence2018-03-28-14-37-41.txt");
-        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺上叶尖后段另见条索状密度增高影及点状高密度影，");
+        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\SentenceTypeCount2018-05-03-18-58-58.txt");
+//        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺下叶见囊泡状无肺纹理透光影。");
         figureExtraction.go(longSentenceList);
         long endTime = System.currentTimeMillis();
         System.out.println("用时:"+ (endTime-startTime) + "ms");
@@ -42,9 +42,10 @@ public class FigureExtraction {
         columnName.add("测量值");
         columnName.add("单位");
         xlsOperator.writeXls(excelPath, columnName);
+
         RelationExtraction re = new RelationExtraction();
         int end = longSentenceList.size();
-        for (String longS : longSentenceList.subList(0, end)) {
+        for (String longS : longSentenceList.subList(0,500)) {
             numOfLong++;
             int numOfShort = 0;
             System.out.println(String.valueOf("长句编号：" + numOfLong));
@@ -55,8 +56,10 @@ public class FigureExtraction {
                 numOfShort++;
                 System.out.println("短句编号：" + numOfShort);
                 ss.match();
-                ss.combineWord();
+
+                ss.semanticSentence = ss.combineWord();
                 numMap = re.relationExtract(ss.semanticSentence, ss.matchedDictionary);
+
                 ArrayList<String> columnContent = null;
 
                 for(Map.Entry<Integer, StructuredShortSentence> entry : numMap.entrySet()){

@@ -70,7 +70,7 @@ public class RMM {
                 }
                 len--; //所有词遍历完没有匹配到，减短匹配长度len，再进入循环
                 if (len==0){ //词典中未收录该词
-                    semanticResult += subStr; //subStr此时一定是一个字，因为len已经从大到小递减过了，已到最小1个字了
+                    semanticResult = subStr + semanticResult; //subStr此时一定是一个字，因为len已经从大到小递减过了，已到最小1个字了
                     newWords.record(subStr, curIndex);
                     curIndex--;
                     len=MAXLEN;

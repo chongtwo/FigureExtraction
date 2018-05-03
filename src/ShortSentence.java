@@ -39,7 +39,7 @@ public class ShortSentence {
     }
 
 
-    public void combineWord(){
+    public String combineWord(){
         int numOfCombine = 0;
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
 //        helper.TxtOperator txtOperator = new helper.TxtOperator();
@@ -56,22 +56,29 @@ public class ShortSentence {
             Matcher m = p.matcher(semanticSentence);
             while(m.find()){  //m.find()是一个迭代器，若一个句子中对同一个pattern匹配到多个，它会自行迭代
                 String combine = "";
+                String combineSem = "";
                 if ((patterns.indexOf(p) == 0)|(patterns.indexOf(p) ==1)|(patterns.indexOf(p) ==2)|(patterns.indexOf(p) ==3)|(patterns.indexOf(p) ==4)){
                     combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-                    matchedDictionary.put("Diagnosis$"+ String.valueOf(numOfCombine) + "$",combine);
+                    combineSem = "Diagnosis#0"+ String.valueOf(numOfCombine) + "#";
+                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2),combineSem);
+                    matchedDictionary.put(combineSem,combine);
                     matchedDictionary.remove(m.group(1));
                     matchedDictionary.remove(m.group(2));
                 }
                 else if (patterns.indexOf(p) == 5){
                     combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
-                    matchedDictionary.put("Diagnosis$" + String.valueOf(numOfCombine) + "$", combine);
+                    combineSem = "Diagnosis#0" + String.valueOf(numOfCombine) + "#";
+                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2)+m.group(3), combineSem);
+                    matchedDictionary.put(combineSem, combine);
                     matchedDictionary.remove(m.group(1));
                     matchedDictionary.remove(m.group(2));
                     matchedDictionary.remove(m.group(3));
                 }
                 else if((patterns.indexOf(p) == 6)|(patterns.indexOf(p) == 7)){
                     combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-                    matchedDictionary.put("Descriptor$" + String.valueOf(numOfCombine) + "$", combine);
+                    combineSem = "Descriptor#0" + String.valueOf(numOfCombine) + "#";
+                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2),combineSem);
+                    matchedDictionary.put(combineSem, combine);
                     matchedDictionary.remove(m.group(1));
                     matchedDictionary.remove(m.group(2));
                 }
@@ -82,6 +89,7 @@ public class ShortSentence {
 //        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
 //            System.out.println(entry.getKey()+":"+ entry.getValue());
 //        }
+        return semanticSentence;
     }
 
 }

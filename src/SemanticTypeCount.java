@@ -1,5 +1,6 @@
 
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,7 @@ public class SemanticTypeCount{
 //        longSentenceList.add("系“左肺上叶鳞癌放化疗后3月”复查：");
 //        longSentenceList.add("左肺上叶尖后段另见条索状密度增高影及点状高密度影，");
 //        longSentenceList.add("与邻近胸膜粘连；");
+
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         Date date = new Date();
@@ -51,7 +53,7 @@ public class SemanticTypeCount{
     }
 
     public MatchResult match(){
-        MatchResult matchResult = MM.maxMatching(sentence);
+        MatchResult matchResult = RMM.maxMatching(sentence);
         matchResult.semanticSentence = FigureMatch.figureMatch(matchResult.semanticSentence);
         return matchResult;
     }
