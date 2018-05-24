@@ -10,9 +10,9 @@ public class FigureExtraction {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
-//        ArrayList<String> longSentenceList = TxtOperator.readTxt("D:\\JavaApp\\FigureExtraction\\out\\1-100-9153.txt");
+//        ArrayList<String> longSentenceList = TxtOperator.readTxt("D:\\JavaApp\\FigureExtraction\\out\\201-300-9153.txt");
 //        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\前100句中的影.txt");
-        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺上叶舌段、两肺下叶背侧见条索状高密度影，");
+        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左侧肩胛骨骨折。");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String excelPath = "./out/result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
         figureExtraction.go(longSentenceList, excelPath);

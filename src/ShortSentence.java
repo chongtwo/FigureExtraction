@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,12 +22,28 @@ public class ShortSentence {
     public void match(){ //把MM单独成类的好处是：换match方法时更方便
         //预处理，忽略“同。。。比较：”“复查：”等
         String postContent = content;
-        if(content.contains("复查：")|content.contains("比较：")|content.contains("现片示：")){
-            String[] conList = content.split("：");
-            int last = conList.length-1;
-            postContent = conList[last];
+        ArrayList<String> ignoreKey = new ArrayList();
+        ignoreKey.add("复查");
+        ignoreKey.add("比较");
+        ignoreKey.add("片示");
+
+        for (String ignoreWord : ignoreKey){
+            if (content.contains(ignoreWord)){
+                int startIndex = content.indexOf(ignoreWord) + ignoreWord.length()+1;
+                postContent = content.substring(startIndex);
+            }
         }
-     
+
+//        if(content.contains("复查")|content.contains("比较")|content.contains("片示")){
+//            int startIndex = content.indexOf("复查") + 3;
+//            postContent = content.substring(startIndex);
+//        }
+//        if(content.contains("复查：")|content.contains("比较：")|content.contains("现片示：")){
+//            String[] conList = content.split("：");
+//            int last = conList.length-1;
+//            postContent = conList[last];
+//        }
+
         MatchResult matchResult = RMM.maxMatching(postContent, true);
         //匹配阿拉伯数字
         MatchResult figureResult = FigureMatch.figureMatch(matchResult.semanticSentence, true);

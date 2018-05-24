@@ -17,7 +17,7 @@ public class RelationExtraction {
     private ArrayList<Pattern> compilePattern(){
         patternList = new ArrayList<Pattern>();
 
-        Pattern p = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(?:(、|Region#[0-9]+#))?(SpecificLocation#[0-9]+#)|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)");
+        Pattern p = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(?:(、|Region#[0-9]+#))?(SpecificLocation#[0-9]+#)|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Region#[0-9]+#)|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)");
         //气管、左右主支气管及其分支开口未见狭窄、中断。
         Pattern p2 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)" +
                 "及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)");//左肺上叶尖后段另见条索状密度增高影及点状高密度影
@@ -25,12 +25,16 @@ public class RelationExtraction {
                 "及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)及(Quantifier#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)");//右肺上叶尖段见结节状、条索状及絮状密度增高影及一结节状高密度影，
         Pattern p4 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(PrimaryLocation#[0-9]+#)(Region#[0-9]+#)(Change#[0-9]+#)");//右肺上叶支气管局部扩张；
         Pattern p5 = Pattern.compile("(PrimaryLocation#[0-9]+#)及(Region#[0-9]+#)、(Region#[0-9]+#)(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Descriptor#[0-9]+#)");//支气管及左、右主支气管开口通畅；
+        Pattern p6 = Pattern.compile("(Quantifier#[0-9]+#)(Diagnosis#[0-9]+#)(Region#[0-9]+#)(Possibility#[0-9]+#)(Diagnosis#[0-9]+#)");//部分病变周围见条索影
+
 
         patternList.add(p);
         patternList.add(p2);
         patternList.add(p3);
         patternList.add(p4);
         patternList.add(p5);
+        patternList.add(p6);
+
         return  patternList;
     }
 
@@ -104,6 +108,13 @@ public class RelationExtraction {
                     numMap.get(1).specificLocation = matchedDictionary.get(m.group(5));
                     numMap.get(1).descriptor = matchedDictionary.get(m.group(6));
                 }
+                else if (patternArrayList.indexOf(p) == 5) {
+                    numMap.put(0, new StructuredShortSentence());
+                    numMap.get(0).specificLocation = matchedDictionary.get(m.group(2))+ matchedDictionary.get(m.group(3));
+                    numMap.get(0).possibility = matchedDictionary.get(m.group(4));
+                    numMap.get(0).diagnosis = matchedDictionary.get(m.group(5));
+                }
+
 //                lastPrimaryLocation = matchedDictionary.get(m.group(1));
                 break;
             }
