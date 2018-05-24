@@ -17,6 +17,7 @@ public class SentenceTypeCount {
         String outPath = ".\\out\\SentenceTypeCount"+String.valueOf(dateFormat.format(date))+".txt";
         String content;
 
+
         for (String longSentence : longSentenceList){
             LongSentence ls = new LongSentence(longSentence);
             ls.segToShort();
@@ -44,6 +45,7 @@ public class SentenceTypeCount {
 
         WriteList.writeList(outPath, resultMap);
     }
+
 
     public static void main(String[] args) {
         SentenceTypeCount sentenceTypeCount = new SentenceTypeCount();

@@ -10,24 +10,25 @@ public class FigureExtraction {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
-//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static\\CT胸部平扫约4000份-描述.txt");
-        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\SentenceTypeCount2018-05-03-18-58-58.txt");
-//        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺下叶见囊泡状无肺纹理透光影。");
-        figureExtraction.go(longSentenceList);
+//        ArrayList<String> longSentenceList = TxtOperator.readTxt("D:\\JavaApp\\FigureExtraction\\out\\1-100-9153.txt");
+//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\前100句中的影.txt");
+        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左肺上叶舌段、两肺下叶背侧见条索状高密度影，");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String excelPath = "./out/result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
+        figureExtraction.go(longSentenceList, excelPath);
         long endTime = System.currentTimeMillis();
         System.out.println("用时:"+ (endTime-startTime) + "ms");
     }
 
 
-    public void go(ArrayList<String> longSentenceList) {
+    public void go(ArrayList<String> longSentenceList, String excelPath) {
         int numOfLong = 0;
         ArrayList<ArrayList<String>> allList = new ArrayList<>();
         XlsOperator xlsOperator = new XlsOperator();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String excelPath = "./out/result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
 //        String excelPath = "./out/distinctresult"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
         //写入表头
         ArrayList<String> columnName = new ArrayList<>();
+        columnName.add("No");
         columnName.add("原句");
         columnName.add("语义");
         columnName.add("主干部位");
@@ -45,7 +46,7 @@ public class FigureExtraction {
 
         RelationExtraction re = new RelationExtraction();
         int end = longSentenceList.size();
-        for (String longS : longSentenceList.subList(0,500)) {
+        for (String longS : longSentenceList.subList(0,end)) {
             numOfLong++;
             int numOfShort = 0;
             System.out.println(String.valueOf("长句编号：" + numOfLong));
@@ -53,6 +54,7 @@ public class FigureExtraction {
             longSentence.segToShort();
             HashMap<Integer, StructuredShortSentence> numMap;
             for (ShortSentence ss : longSentence.shortSentences) {
+                ss.content = ss.content.split("\t")[0];
                 numOfShort++;
                 System.out.println("短句编号：" + numOfShort);
                 ss.match();
@@ -64,6 +66,7 @@ public class FigureExtraction {
 
                 for(Map.Entry<Integer, StructuredShortSentence> entry : numMap.entrySet()){
                     columnContent = new ArrayList<>();
+                    columnContent.add(String.valueOf(numOfLong));
                     columnContent.add(ss.content);
                     columnContent.add(ss.semanticSentence);
                     StructuredShortSentence se = entry.getValue();

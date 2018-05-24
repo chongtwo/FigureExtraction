@@ -11,22 +11,26 @@ import java.util.regex.Pattern;
 
 public class RelationExtraction {
 
-    static String lastPrimaryLocation = "";
+//    static String lastPrimaryLocation = "";
     ArrayList<Pattern> patternList;
 
     private ArrayList<Pattern> compilePattern(){
         patternList = new ArrayList<Pattern>();
-        Pattern p = Pattern.compile("(PrimaryLocation#[0-9]+#)|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)");//气管、左右主支气管及其分支开口未见狭窄、中断。
+
+        Pattern p = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(?:(、|Region#[0-9]+#))?(SpecificLocation#[0-9]+#)|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)");
+        //气管、左右主支气管及其分支开口未见狭窄、中断。
         Pattern p2 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)" +
                 "及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)");//左肺上叶尖后段另见条索状密度增高影及点状高密度影
         Pattern p3 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)、(Descriptor#[0-9]+#)" +
                 "及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)及(Quantifier#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)");//右肺上叶尖段见结节状、条索状及絮状密度增高影及一结节状高密度影，
-//        Pattern p4 = Pattern.compile("(PrimaryLocation#0#)(SpecificLocation#1#)及(PrimaryLocation#2#)(SpecificLocation#3#)(SpecificLocation#4#)" +
-//                "(Possibility#5#)(Descriptor#6#)(Descriptor#7#)(DiagnosisSuffix#8#)");//右肺中叶及左肺上叶背段可见条状高密度影，
+        Pattern p4 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(PrimaryLocation#[0-9]+#)(Region#[0-9]+#)(Change#[0-9]+#)");//右肺上叶支气管局部扩张；
+        Pattern p5 = Pattern.compile("(PrimaryLocation#[0-9]+#)及(Region#[0-9]+#)、(Region#[0-9]+#)(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Descriptor#[0-9]+#)");//支气管及左、右主支气管开口通畅；
 
         patternList.add(p);
         patternList.add(p2);
         patternList.add(p3);
+        patternList.add(p4);
+        patternList.add(p5);
         return  patternList;
     }
 
@@ -47,7 +51,7 @@ public class RelationExtraction {
         int numOfFind = 0;
         HashMap<Integer, StructuredShortSentence> numMap = new HashMap<>();//用于记录有几个find
         numMap.put(numOfFind, new StructuredShortSentence());//先初始化，避免m.find为空时(句子缺少主干部位时)的空指针，如果m.find不为空，numMap.put将会覆盖该条
-        numMap.get(numOfFind).primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
+//        numMap.get(numOfFind).primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
 
         boolean isfind = false;
         int end = patternArrayList.size();
@@ -67,11 +71,12 @@ public class RelationExtraction {
                         numMap.get(i).specificLocation = matchedDictionary.get(m.group(2));
                         numMap.get(i).possibility = matchedDictionary.get(m.group(3));
                     }
+//                    lastPrimaryLocation = matchedDictionary.get(m.group(1));
                 }
-                if (patternArrayList.indexOf(p) == 2) {
+                else if (patternArrayList.indexOf(p) == 2) {
                     numMap.put(0, new StructuredShortSentence());
                     numMap.put(1, new StructuredShortSentence());
-                    numMap.get(0).descriptor = matchedDictionary.get(m.group(4)) + matchedDictionary.get(m.group(5)) + "," + matchedDictionary.get(m.group(6));
+                    numMap.get(0).descriptor = matchedDictionary.get(m.group(4))+ "," + matchedDictionary.get(m.group(5)) + "," + matchedDictionary.get(m.group(6));
                     numMap.get(0).diagnosis = matchedDictionary.get(m.group(7));
                     numMap.get(1).descriptor = matchedDictionary.get(m.group(9));
                     numMap.get(1).diagnosis = matchedDictionary.get(m.group(10));
@@ -82,6 +87,24 @@ public class RelationExtraction {
                         numMap.get(i).possibility = matchedDictionary.get(m.group(3));
                     }
                 }
+                else if (patternArrayList.indexOf(p) == 3) {
+                    numMap.put(0, new StructuredShortSentence());
+                    numMap.get(0).primaryLocation = matchedDictionary.get(m.group(3));
+                    numMap.get(0).region = matchedDictionary.get(m.group(4));
+                    numMap.get(0).change = matchedDictionary.get(m.group(5));
+                }
+                else if (patternArrayList.indexOf(p) == 4) {
+                    numMap.put(0, new StructuredShortSentence());
+                    numMap.put(1, new StructuredShortSentence());
+                    numMap.get(0).primaryLocation = matchedDictionary.get(m.group(1));
+                    numMap.get(1).primaryLocation = matchedDictionary.get(m.group(4));
+                    numMap.get(1).region = matchedDictionary.get(m.group(2))+ "," + matchedDictionary.get(m.group(3));
+                    numMap.get(0).specificLocation = matchedDictionary.get(m.group(5));
+                    numMap.get(0).descriptor = matchedDictionary.get(m.group(6));
+                    numMap.get(1).specificLocation = matchedDictionary.get(m.group(5));
+                    numMap.get(1).descriptor = matchedDictionary.get(m.group(6));
+                }
+//                lastPrimaryLocation = matchedDictionary.get(m.group(1));
                 break;
             }
         }
@@ -89,7 +112,7 @@ public class RelationExtraction {
             //如果没有发现一模一样的句子
             Matcher m = patternArrayList.get(0).matcher(semanticSentence);
             while(m.find()){
-                primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
+//                primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
                 specificLocation = "";
                 region = "";
                 numMap.put(numOfFind, new StructuredShortSentence());
@@ -99,10 +122,10 @@ public class RelationExtraction {
                             primaryLocation = matchedDictionary.get(m.group(index))+ ",";
                         }
                         else if(m.group(index).contains("SpecificLocation")){
-                            specificLocation = matchedDictionary.get(m.group(index))+",";
+                            specificLocation += matchedDictionary.get(m.group(index))+",";
                         }
                         else if (m.group(index).contains("Region")){
-                            region = matchedDictionary.get(m.group(index))+",";
+                            region += matchedDictionary.get(m.group(index))+",";
                         }
                         matchedDictionary.remove(m.group(index));
                     }
@@ -111,7 +134,7 @@ public class RelationExtraction {
                 numMap.get(numOfFind).specificLocation = specificLocation;
                 numMap.get(numOfFind).region = region;
                 numOfFind++;
-                lastPrimaryLocation = primaryLocation;
+//                lastPrimaryLocation = primaryLocation;
             }
 
             specificLocation = "";//清空

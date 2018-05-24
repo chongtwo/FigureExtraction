@@ -6,3 +6,8 @@
 (Descriptor#[0-9]+#)(Change#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/密度 增高 影--> 诊断
 (Descriptor#[0-9]+#)(DescriptorSuffix#[0-9]+#)/条絮 样--> 性状
 (Diagnosis#[0-9]+#)(DescriptorSuffix#[0-9]+#)/结节 状-->性状
+(PrimaryLocation#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/支气管 影-->诊断
+(LocConj#[0-9]+#)(PrimaryLocation#[0-9]+#)(LocationSuffix#[0-9]+#)/近 胸膜 处-->细节部位
+(PrimaryLocation#[0-9]+#)(LocConj#[0-9]+#)/胸膜 下-->细节部位；纵隔 旁
+(PrimaryLocation#[0-9]+#)(LocationSuffix#[0-9]+#)/胸腺 区-->主干部位
+(Descriptor#[0-9]+#)(Change#[0-9]+#)(LocationSuffix#[0-9]+#)/透光 增强 区-->诊断

@@ -12,7 +12,8 @@ public class LongSentence {
 
     public void segToShort(){
         content = content.replace("。","。\n")
-                .replace("，", "，\n")
+                .replace("，”", "，”\n")
+                .replace("，","，\n")
                 .replace("；","；\n")
                 .replace(",", ",\n")
                 .replace(";",";\n");
