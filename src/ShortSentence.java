@@ -26,6 +26,7 @@ public class ShortSentence {
             int last = conList.length-1;
             postContent = conList[last];
         }
+     
         MatchResult matchResult = RMM.maxMatching(postContent, true);
         //匹配阿拉伯数字
         MatchResult figureResult = FigureMatch.figureMatch(matchResult.semanticSentence, true);
@@ -89,7 +90,7 @@ public class ShortSentence {
                     matchedDictionary.remove(m.group(1));
                     matchedDictionary.remove(m.group(2));
                 }
-                else if (patterns.indexOf(p) == 9){
+                else if (patterns.indexOf(p) == 9| patterns.indexOf(p) == 13){
                     combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
                     combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine)+"#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2)+m.group(3), combineSem);
