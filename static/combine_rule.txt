@@ -12,3 +12,5 @@
 (PrimaryLocation#[0-9]+#)(LocationSuffix#[0-9]+#)/胸腺 区-->主干部位
 (Descriptor#[0-9]+#)(Change#[0-9]+#)(LocationSuffix#[0-9]+#)/透光 增强 区-->诊断
 (LocConj#[0-9]+#)(Region#[0-9]+#)(PrimaryLocation#[0-9]+#)/与 邻近 胸膜-->细节部位
+(LocConj#[0-9]+#)(PrimaryLocation#[0-9]+#)/近 斜裂胸膜-->细节部位
+(LocConj#[0-9]+#)(PrimaryLocation#[0-9]+#)(LocConj#[0-9]+#)/近 斜裂胸膜 下 -->细节部位

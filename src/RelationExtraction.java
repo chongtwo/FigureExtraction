@@ -17,13 +17,17 @@ public class RelationExtraction {
     private ArrayList<Pattern> compilePattern(){
         patternList = new ArrayList<Pattern>();
 
-        Pattern p = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(?:(、|Region#[0-9]+#))?(SpecificLocation#[0-9]+#)|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Region#[0-9]+#)|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)");
+        Pattern p = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(?:(、|Region#[0-9]+#))?(SpecificLocation#[0-9]+#)" +
+                "|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Region#[0-9]+#)" +
+                "|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)"+ //双肺支气管血管束增多；右肺上叶支气管局部扩张
+                "|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?" +
+                "|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)");
         //气管、左右主支气管及其分支开口未见狭窄、中断。
         Pattern p2 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)" +
                 "及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)");//左肺上叶尖后段另见条索状密度增高影及点状高密度影
         Pattern p3 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)、(Descriptor#[0-9]+#)" +
                 "及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)及(Quantifier#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)");//右肺上叶尖段见结节状、条索状及絮状密度增高影及一结节状高密度影，
-        Pattern p4 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(PrimaryLocation#[0-9]+#)(Region#[0-9]+#)(Change#[0-9]+#)");//右肺上叶支气管局部扩张；
+        Pattern p4 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)?(<PL>PrimaryLocation#[0-9]+#)(<R>Region#[0-9]+#)?(<C>Change#[0-9]+#)");//右肺上叶支气管局部扩张；
         Pattern p5 = Pattern.compile("(PrimaryLocation#[0-9]+#)及(Region#[0-9]+#)、(Region#[0-9]+#)(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Descriptor#[0-9]+#)");//支气管及左、右主支气管开口通畅；
         Pattern p6 = Pattern.compile("(Quantifier#[0-9]+#)(Diagnosis#[0-9]+#)(Region#[0-9]+#)(Possibility#[0-9]+#)(Diagnosis#[0-9]+#)");//部分病变周围见条索影
 
@@ -93,9 +97,9 @@ public class RelationExtraction {
                 }
                 else if (patternArrayList.indexOf(p) == 3) {
                     numMap.put(0, new StructuredShortSentence());
-                    numMap.get(0).primaryLocation = matchedDictionary.get(m.group(3));
-                    numMap.get(0).region = matchedDictionary.get(m.group(4));
-                    numMap.get(0).change = matchedDictionary.get(m.group(5));
+                    numMap.get(0).primaryLocation = matchedDictionary.get(m.group("PL"));
+                    numMap.get(0).region = matchedDictionary.get(m.group("R"));
+                    numMap.get(0).change = matchedDictionary.get(m.group("C"));
                 }
                 else if (patternArrayList.indexOf(p) == 4) {
                     numMap.put(0, new StructuredShortSentence());
@@ -119,8 +123,9 @@ public class RelationExtraction {
                 break;
             }
         }
+
+        //如果没有发现一模一样的句子
         if (!isfind){
-            //如果没有发现一模一样的句子
             Matcher m = patternArrayList.get(0).matcher(semanticSentence);
             while(m.find()){
 //                primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新

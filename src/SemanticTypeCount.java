@@ -29,11 +29,12 @@ public class SemanticTypeCount{
         String distinctSentencePath = ".\\out\\distinctSentence"+ String.valueOf(dateFormat.format(date)) + ".txt";
 
         SemanticTypeCount semanticTypeCount;
+        String[] punctuationList = {"。", "，", "；",",", ";"};
 
         for (String longSentence : longSentenceList){
             LongSentence ls = new LongSentence(longSentence);
-            ls.segToShort();
-            for (ShortSentence ss : ls.shortSentences){
+            ls.segToShort(punctuationList);
+            for (ShortSentence ss : ls.getShortSentences()){
                 semanticTypeCount = new SemanticTypeCount();
                 semanticTypeCount.sentence = ss.content;
                 MatchResult matchResult = semanticTypeCount.match();

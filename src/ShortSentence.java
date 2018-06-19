@@ -1,8 +1,5 @@
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,7 +7,7 @@ import java.util.regex.Pattern;
 public class ShortSentence {
 
     public String content ;
-    String semanticSentence;
+    public String semanticSentence;
     public HashMap<String, String> matchedDictionary = new HashMap<>();
 
 
@@ -50,6 +47,7 @@ public class ShortSentence {
 
         semanticSentence = matchResult.semanticSentence;
         matchedDictionary = matchResult.matchedDictionary;
+
         for (Map.Entry<String, String> entry: figureResult.matchedDictionary.entrySet()){
             matchedDictionary.put(entry.getKey(),entry.getValue());
         }
@@ -64,7 +62,7 @@ public class ShortSentence {
     }
 
 
-    public String combineWord(){
+    public void combineWord(){
         int numOfCombine = 0;
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
 //        helper.TxtOperator txtOperator = new helper.TxtOperator();
@@ -107,7 +105,7 @@ public class ShortSentence {
                     matchedDictionary.remove(m.group(1));
                     matchedDictionary.remove(m.group(2));
                 }
-                else if (patterns.indexOf(p) == 9| patterns.indexOf(p) == 13){
+                else if (patterns.indexOf(p) == 9| patterns.indexOf(p) == 13 ){
                     combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
                     combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine)+"#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2)+m.group(3), combineSem);
@@ -116,7 +114,7 @@ public class ShortSentence {
                     matchedDictionary.remove(m.group(2));
                     matchedDictionary.remove(m.group(3));
                 }
-                else if (patterns.indexOf(p) == 10){
+                else if (patterns.indexOf(p) == 10 | patterns.indexOf(p)==14){
                     combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
                     combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine)+"#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2), combineSem);
@@ -132,7 +130,6 @@ public class ShortSentence {
 //                    matchedDictionary.remove(m.group(1));
 //                    matchedDictionary.remove(m.group(2));
 //                }
-
                 numOfCombine++;
 
             }
@@ -140,7 +137,6 @@ public class ShortSentence {
 //        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
 //            System.out.println(entry.getKey()+":"+ entry.getValue());
 //        }
-        return semanticSentence;
     }
 
 }

@@ -1,31 +1,38 @@
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class FigureExtraction {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
-//        ArrayList<String> longSentenceList = TxtOperator.readTxt("D:\\JavaApp\\FigureExtraction\\out\\201-300-9153.txt");
-//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\out\\前100句中的影.txt");
-        ArrayList<String> longSentenceList = new ArrayList<>();longSentenceList.add("左侧肩胛骨骨折。");
+        ArrayList<String> longSentenceList = TxtOperator.readTxt("D:\\JavaApp\\FigureExtraction\\out\\YingSentenceTypeCount2018-06-12-16-23-41.txt");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String excelPath = "./out/result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
-        figureExtraction.go(longSentenceList, excelPath);
+        String excelPath = "./out/ying_result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
+        //产生100个随机数，并选出句子
+        RandomNum rdmn = new RandomNum();
+        ArrayList<Integer> rdmnArrL = rdmn.genRanNum(100,longSentenceList.size()-1);
+        ArrayList<String> selectedLongArrL = new ArrayList<>();
+        for (int i : rdmnArrL){
+            selectedLongArrL.add(longSentenceList.get(i));
+        }
+        //for test single
+//        ArrayList<String> selectedLongArrL = new ArrayList<>();
+//        selectedLongArrL.add("右肺上叶尖段肺见条絮状密度增高影，");
+//        ArrayList<Integer> rdmnArrL = new ArrayList<>();
+//        rdmnArrL.add(1);
+
+        figureExtraction.go(selectedLongArrL, excelPath, rdmnArrL);
         long endTime = System.currentTimeMillis();
         System.out.println("用时:"+ (endTime-startTime) + "ms");
     }
 
 
-    public void go(ArrayList<String> longSentenceList, String excelPath) {
+    public void go(ArrayList<String> longSentenceList, String excelPath, ArrayList<Integer> selectedNumArrL) {
         int numOfLong = 0;
         ArrayList<ArrayList<String>> allList = new ArrayList<>();
         XlsOperator xlsOperator = new XlsOperator();
-//        String excelPath = "./out/distinctresult"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
         //写入表头
         ArrayList<String> columnName = new ArrayList<>();
         columnName.add("No");
@@ -44,6 +51,8 @@ public class FigureExtraction {
         columnName.add("单位");
         xlsOperator.writeXls(excelPath, columnName);
 
+        String[] punctuationList = {"。", "，", "；",",", ";"};
+
         RelationExtraction re = new RelationExtraction();
         int end = longSentenceList.size();
         for (String longS : longSentenceList.subList(0,end)) {
@@ -51,22 +60,20 @@ public class FigureExtraction {
             int numOfShort = 0;
             System.out.println(String.valueOf("长句编号：" + numOfLong));
             LongSentence longSentence = new LongSentence(longS);
-            longSentence.segToShort();
+            longSentence.segToShort(punctuationList);
             HashMap<Integer, StructuredShortSentence> numMap;
-            for (ShortSentence ss : longSentence.shortSentences) {
-                ss.content = ss.content.split("\t")[0];
+            for (ShortSentence ss : longSentence.getShortSentences()) {
+                ss.content = ss.content.split("\t")[0]; //针对有统计数量的输入文本，只取前面的原句，舍弃后面的统计数字
                 numOfShort++;
                 System.out.println("短句编号：" + numOfShort);
                 ss.match();
-
-                ss.semanticSentence = ss.combineWord();
+                ss.combineWord();
                 numMap = re.relationExtract(ss.semanticSentence, ss.matchedDictionary);
 
-                ArrayList<String> columnContent = null;
-
+                ArrayList<String> columnContent;
                 for(Map.Entry<Integer, StructuredShortSentence> entry : numMap.entrySet()){
                     columnContent = new ArrayList<>();
-                    columnContent.add(String.valueOf(numOfLong));
+                    columnContent.add(String.valueOf(selectedNumArrL.get(numOfLong-1)));
                     columnContent.add(ss.content);
                     columnContent.add(ss.semanticSentence);
                     StructuredShortSentence se = entry.getValue();
