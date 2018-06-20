@@ -18,14 +18,14 @@ public class RE {
         ArrayList<String> exactStrList = TxtOperator.readTxt(".//static//exact.txt");
 
         for (String str : bodyPartStrList) {
-            Integer patternID = Integer.valueOf(str.split("\t")[0]);
-            Pattern patternContent = Pattern.compile(str.split("\t")[1]);
+            Integer patternID = Integer.valueOf(str.split(" ")[0]);
+            Pattern patternContent = Pattern.compile(str.split(" ")[1]);
             bodyPartPatMap.put(patternID, patternContent);
         }
 
         for (String str : exactStrList) {
-            Integer patternID = Integer.valueOf(str.split("\t")[0]);
-            Pattern patternContent = Pattern.compile(str.split("\t")[1]);
+            Integer patternID = Integer.valueOf(str.split(" ")[0]);
+            Pattern patternContent = Pattern.compile(str.split(" ")[1]);
             exactPatMap.put(patternID, patternContent);
         }
     }
@@ -48,58 +48,61 @@ public class RE {
 
         for (Map.Entry<Integer, Pattern> entry : exactPatMap.entrySet()) {
             Matcher m = entry.getValue().matcher(semanticSentence);
+//            Pattern p = Pattern.compile("(<PL1>PrimaryLocation#[0-9]+#)(<SL1>SpecificLocation#[0-9]+#)(<P1>Possibility#[0-9]+#)(<DP1>Descriptor#[0-9]+#)(<DG1>Diagnosis#[0-9]+#)(<CC1>coorConj#[0-9]+#)(<DP2>Descriptor#[0-9]+#)(<DG2>Diagnosis#[0-9]+#)");
             Integer patternID = entry.getKey();
             while (m.find()) {
                 isFound = true;
                 if (patternID ==  1) {
                     numMap.put(0, new StructuredShortSentence());
                     numMap.put(1, new StructuredShortSentence());
-                    numMap.get(0).setDescriptor(matchedDictionary.get(m.group(4)));
-                    numMap.get(0).setDiagnosis(matchedDictionary.get(m.group(5)));
-                    numMap.get(1).setDescriptor(matchedDictionary.get(m.group(6)));
-                    numMap.get(1).setDiagnosis(matchedDictionary.get(m.group(7)));
+                    numMap.get(0).setDescriptor(matchedDictionary.get(m.group("DP1")));
+                    numMap.get(0).setDiagnosis(matchedDictionary.get(m.group("DG1")));
+                    numMap.get(1).setDescriptor(matchedDictionary.get(m.group("DP2")));
+                    numMap.get(1).setDiagnosis(matchedDictionary.get(m.group("DG2")));
                     for (int i = 0; i <= 1; i++) {
-                        numMap.get(i).setPrimaryLocation(matchedDictionary.get(m.group(1)));
-                        numMap.get(i).setSpecificLocation(matchedDictionary.get(m.group(2)));
-                        numMap.get(i).setPossibility(matchedDictionary.get(m.group(3)));
+                        numMap.get(i).setPrimaryLocation(matchedDictionary.get(m.group("PL1")));
+                        numMap.get(i).setSpecificLocation(matchedDictionary.get(m.group("SL1")));
+                        numMap.get(i).setPossibility(matchedDictionary.get(m.group("P1")));
                     }
                 }
                 else if (patternID == 2) {
                     numMap.put(0, new StructuredShortSentence());
                     numMap.put(1, new StructuredShortSentence());
-                    numMap.get(0).setDescriptor(matchedDictionary.get(m.group(4))+ "," + matchedDictionary.get(m.group(5)) + "," + matchedDictionary.get(m.group(6)));
-                    numMap.get(0).setDiagnosis(matchedDictionary.get(m.group(7)));
-                    numMap.get(1).setDescriptor(matchedDictionary.get(m.group(9)));
-                    numMap.get(1).setDiagnosis(matchedDictionary.get(m.group(10)));
-                    numMap.get(1).setQuantifier(matchedDictionary.get(m.group(8)));
+                    numMap.get(0).setDescriptor(matchedDictionary.get(m.group("DP1"))+ "," + matchedDictionary.get(m.group("DP2")) + "," + matchedDictionary.get(m.group("DP3")));
+                    numMap.get(0).setDiagnosis(matchedDictionary.get(m.group("DG1")));
+                    numMap.get(1).setDescriptor(matchedDictionary.get(m.group("DP4")));
+                    numMap.get(1).setDiagnosis(matchedDictionary.get(m.group("DG2")));
+                    numMap.get(1).setQuantifier(matchedDictionary.get(m.group("Q1")));
                     for (int i = 0; i <= 1; i++) {
-                        numMap.get(i).setPrimaryLocation(matchedDictionary.get(m.group(1)));
-                        numMap.get(i).setSpecificLocation(matchedDictionary.get(m.group(2)));
-                        numMap.get(i).setPossibility(matchedDictionary.get(m.group(3)));
+                        numMap.get(i).setPrimaryLocation(matchedDictionary.get(m.group("PL1")));
+                        numMap.get(i).setSpecificLocation(matchedDictionary.get(m.group("SL1")));
+                        numMap.get(i).setPossibility(matchedDictionary.get(m.group("P1")));
                     }
                 }
                 else if (patternID == 3) {
                     numMap.put(0, new StructuredShortSentence());
-                    numMap.get(0).setPrimaryLocation(matchedDictionary.get(m.group("PL")));
-                    numMap.get(0).setRegion(matchedDictionary.get(m.group("R")));
-                    numMap.get(0).setChange(matchedDictionary.get(m.group("C")));
+                    numMap.get(0).setPrimaryLocation(matchedDictionary.get(m.group("PL2")));
+                    numMap.get(0).setSpecificLocation(matchedDictionary.get(m.group("PL1"))+matchedDictionary.get(m.group("SL1")));
+                    numMap.get(0).setRegion(matchedDictionary.get(m.group("R1")));
+                    numMap.get(0).setChange(matchedDictionary.get(m.group("C1")));
                 }
                 else if (patternID == 4) {
                     numMap.put(0, new StructuredShortSentence());
                     numMap.put(1, new StructuredShortSentence());
-                    numMap.get(0).setPrimaryLocation(matchedDictionary.get(m.group(1)));
-                    numMap.get(1).setPrimaryLocation(matchedDictionary.get(m.group(4)));
-                    numMap.get(1).setRegion(matchedDictionary.get(m.group(2))+ "," + matchedDictionary.get(m.group(3)));
-                    numMap.get(0).setSpecificLocation(matchedDictionary.get(m.group(5)));
-                    numMap.get(0).setDescriptor(matchedDictionary.get(m.group(6)));
-                    numMap.get(1).setSpecificLocation(matchedDictionary.get(m.group(5)));
-                    numMap.get(1).setDescriptor(matchedDictionary.get(m.group(6)));
+                    numMap.get(0).setPrimaryLocation(matchedDictionary.get(m.group("PL1")));
+                    numMap.get(1).setPrimaryLocation(matchedDictionary.get(m.group("PL2")));
+                    numMap.get(1).setRegion(matchedDictionary.get(m.group("R1"))+ "," + matchedDictionary.get(m.group("R2")));
+                    for (int i = 0 ; i <=1 ; i++ ) {
+                        numMap.get(i).setSpecificLocation(matchedDictionary.get(m.group("SL1")));
+                        numMap.get(i).setDescriptor(matchedDictionary.get(m.group("DP1")));
+                    }
                 }
-                else if (patternID ==  5) {
+                else if (patternID ==  5) { //部分病变周围见条索影
                     numMap.put(0, new StructuredShortSentence());
-                    numMap.get(0).setSpecificLocation(matchedDictionary.get(m.group(2))+ matchedDictionary.get(m.group(3)));
-                    numMap.get(0).setPossibility(matchedDictionary.get(m.group(4)));
-                    numMap.get(0).setDiagnosis(matchedDictionary.get(m.group(5)));
+                    numMap.get(0).setPrimaryLocation(matchedDictionary.get(m.group("DG1")));
+                    numMap.get(0).setSpecificLocation(matchedDictionary.get(m.group("R1")));
+                    numMap.get(0).setPossibility(matchedDictionary.get(m.group("P1")));
+                    numMap.get(0).setDiagnosis(matchedDictionary.get(m.group("DG2")));
                 }
                 break;
             }

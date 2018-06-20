@@ -1,5 +1,5 @@
-1	(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(?:(、|Region#[0-9]+#))?(SpecificLocation#[0-9]+#)
-2	(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Region#[0-9]+#)
-3	(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)
-4	(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)
-5	(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?
+1 (PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(?:(、|Region#[0-9]+#))?(SpecificLocation#[0-9]+#)
+2 (PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Region#[0-9]+#)
+3 (PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)
+4 (Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)
+5 (PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?

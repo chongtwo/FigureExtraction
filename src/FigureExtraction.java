@@ -11,17 +11,17 @@ public class FigureExtraction {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String excelPath = "./out/ying_result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
         //产生100个随机数，并选出句子
-        RandomNum rdmn = new RandomNum();
-        ArrayList<Integer> rdmnArrL = rdmn.genRanNum(100,longSentenceList.size()-1);
-        ArrayList<String> selectedLongArrL = new ArrayList<>();
-        for (int i : rdmnArrL){
-            selectedLongArrL.add(longSentenceList.get(i));
-        }
-        //for test single
+//        RandomNum rdmn = new RandomNum();
+//        ArrayList<Integer> rdmnArrL = rdmn.genRanNum(100,longSentenceList.size()-1);
 //        ArrayList<String> selectedLongArrL = new ArrayList<>();
-//        selectedLongArrL.add("所扫层面左侧肾上腺见类圆形结节影");
-//        ArrayList<Integer> rdmnArrL = new ArrayList<>();
-//        rdmnArrL.add(1);
+//        for (int i : rdmnArrL){
+//            selectedLongArrL.add(longSentenceList.get(i));
+//        }
+        //for test single
+        ArrayList<String> selectedLongArrL = new ArrayList<>();
+        selectedLongArrL.add("部分病变周围见条索影");
+        ArrayList<Integer> rdmnArrL = new ArrayList<>();
+        rdmnArrL.add(1);
 
         figureExtraction.go(selectedLongArrL, excelPath, rdmnArrL);
         long endTime = System.currentTimeMillis();
@@ -38,8 +38,8 @@ public class FigureExtraction {
         columnName.add("No");
         columnName.add("原句");
         columnName.add("语义");
-        columnName.add("主干部位");
-        columnName.add("细节部位");
+        columnName.add("核心部位");
+        columnName.add("修饰部位");
         columnName.add("区域");
         columnName.add("可能性");
         columnName.add("性状");
