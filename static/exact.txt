@@ -1,0 +1,5 @@
+1	(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#) 左肺上叶尖后段另见条索状密度增高影及点状高密度影
+2	(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)、(Descriptor#[0-9]+#)及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)及(Quantifier#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)   右肺上叶尖段见结节状、条索状及絮状密度增高影及一结节状高密度影，
+3	(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)?(<PL>PrimaryLocation#[0-9]+#)(<R>Region#[0-9]+#)?(<C>Change#[0-9]+#)    右肺上叶支气管局部扩张
+4	(PrimaryLocation#[0-9]+#)及(Region#[0-9]+#)、(Region#[0-9]+#)(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Descriptor#[0-9]+#)  支气管及左、右主支气管开口通畅
+5	(Quantifier#[0-9]+#)(Diagnosis#[0-9]+#)(Region#[0-9]+#)(Possibility#[0-9]+#)(Diagnosis#[0-9]+#) 部分病变周围见条索影

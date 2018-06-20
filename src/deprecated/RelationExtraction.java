@@ -1,3 +1,5 @@
+package deprecated;
+
 import com.sun.org.apache.xpath.internal.operations.Variable;
 
 import javax.lang.model.element.VariableElement;
@@ -14,6 +16,7 @@ public class RelationExtraction {
 //    static String lastPrimaryLocation = "";
     ArrayList<Pattern> patternList;
 
+
     private ArrayList<Pattern> compilePattern(){
         patternList = new ArrayList<Pattern>();
 
@@ -22,6 +25,7 @@ public class RelationExtraction {
                 "|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)"+ //双肺支气管血管束增多；右肺上叶支气管局部扩张
                 "|(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#|Region#[0-9]+#)?" +
                 "|(Region#[0-9]+#)(SpecificLocation#[0-9]+#)?(PrimaryLocation#[0-9]+#)");
+
         //气管、左右主支气管及其分支开口未见狭窄、中断。
         Pattern p2 = Pattern.compile("(PrimaryLocation#[0-9]+#)(SpecificLocation#[0-9]+#)(Possibility#[0-9]+#)(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)" +
                 "及(Descriptor#[0-9]+#)(Diagnosis#[0-9]+#)");//左肺上叶尖后段另见条索状密度增高影及点状高密度影
@@ -42,6 +46,8 @@ public class RelationExtraction {
         return  patternList;
     }
 
+
+
     public HashMap<Integer, StructuredShortSentence> relationExtract(String semanticSentence, HashMap<String, String> matchedDictionary){
         String primaryLocation = "";
         String specificLocation = "";
@@ -61,12 +67,12 @@ public class RelationExtraction {
         numMap.put(numOfFind, new StructuredShortSentence());//先初始化，避免m.find为空时(句子缺少主干部位时)的空指针，如果m.find不为空，numMap.put将会覆盖该条
 //        numMap.get(numOfFind).primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新
 
-        boolean isfind = false;
+        boolean isFound = false;
         int end = patternArrayList.size();
         for(Pattern p: patternArrayList.subList(1,end)) {
             Matcher m = p.matcher(semanticSentence);
             while (m.find()) {
-                isfind = true;
+                isFound = true;
                 if (patternArrayList.indexOf(p) == 1) {
                     numMap.put(0, new StructuredShortSentence());
                     numMap.put(1, new StructuredShortSentence());
@@ -125,7 +131,7 @@ public class RelationExtraction {
         }
 
         //如果没有发现一模一样的句子
-        if (!isfind){
+        if (!isFound){
             Matcher m = patternArrayList.get(0).matcher(semanticSentence);
             while(m.find()){
 //                primaryLocation = lastPrimaryLocation;//primaryLocation默认是上次的，如果有新的，则在while(m.find())中更新

@@ -19,7 +19,7 @@ public class FigureExtraction {
         }
         //for test single
 //        ArrayList<String> selectedLongArrL = new ArrayList<>();
-//        selectedLongArrL.add("右肺上叶尖段肺见条絮状密度增高影，");
+//        selectedLongArrL.add("所扫层面左侧肾上腺见类圆形结节影");
 //        ArrayList<Integer> rdmnArrL = new ArrayList<>();
 //        rdmnArrL.add(1);
 
@@ -53,7 +53,8 @@ public class FigureExtraction {
 
         String[] punctuationList = {"。", "，", "；",",", ";"};
 
-        RelationExtraction re = new RelationExtraction();
+//        deprecated.RelationExtraction re = new deprecated.RelationExtraction();
+        RE re = new RE();
         int end = longSentenceList.size();
         for (String longS : longSentenceList.subList(0,end)) {
             numOfLong++;
@@ -77,17 +78,17 @@ public class FigureExtraction {
                     columnContent.add(ss.content);
                     columnContent.add(ss.semanticSentence);
                     StructuredShortSentence se = entry.getValue();
-                    columnContent.add(se.primaryLocation);
-                    columnContent.add(se.specificLocation);
-                    columnContent.add(se.region);
-                    columnContent.add(se.possibility);
-                    columnContent.add(se.descriptor);
-                    columnContent.add(se.diagnosis);
-                    columnContent.add(se.change);
-                    columnContent.add(se.quantifier);
-                    columnContent.add(se.measureLocation);
-                    columnContent.add(se.value);
-                    columnContent.add(se.unit);
+                    columnContent.add(se.getPrimaryLocation());
+                    columnContent.add(se.getSpecificLocation());
+                    columnContent.add(se.getRegion());
+                    columnContent.add(se.getPossibility());
+                    columnContent.add(se.getDescriptor());
+                    columnContent.add(se.getDiagnosis());
+                    columnContent.add(se.getChange());
+                    columnContent.add(se.getQuantifier());
+                    columnContent.add(se.getMeasureLocation());
+                    columnContent.add(se.getValue());
+                    columnContent.add(se.getUnit());
 
                     allList.add(columnContent);
                 }

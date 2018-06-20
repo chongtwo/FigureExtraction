@@ -51,21 +51,12 @@ public class ShortSentence {
         for (Map.Entry<String, String> entry: figureResult.matchedDictionary.entrySet()){
             matchedDictionary.put(entry.getKey(),entry.getValue());
         }
-
-//        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)?(?:约)?(?:为)?(?<value>(?:-)?\\d+(?:\\.\\d+)?(?:(x|×|、|~|-)\\d+(?:\\.\\d+)?)?(?:(x|×|、|~)\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)");
-//        Matcher m = quantifierPattern.matcher(semanticSentence);
-//        int numOfFind = 0;
-//        while (m.find()){
-//            matchedDictionary.put("value#"+String.valueOf(numOfFind)+"#",m.group("value"));
-//            numOfFind++;
-//        }
     }
 
 
     public void combineWord(){
         int numOfCombine = 0;
         ArrayList<Pattern> patterns = new ArrayList<Pattern>();
-//        helper.TxtOperator txtOperator = new helper.TxtOperator();
         String ruleFilePath = ".\\static\\combine_rule.txt";
         ArrayList<String> rules = TxtOperator.readTxt(ruleFilePath);
         //把rules中的每条rulecomplie好,放到另一个ArrayList中
