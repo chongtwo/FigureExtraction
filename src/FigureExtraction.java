@@ -11,17 +11,17 @@ public class FigureExtraction {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String excelPath = "./out/ying_result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
         //产生100个随机数，并选出句子
-//        RandomNum rdmn = new RandomNum();
-//        ArrayList<Integer> rdmnArrL = rdmn.genRanNum(100,longSentenceList.size()-1);
-//        ArrayList<String> selectedLongArrL = new ArrayList<>();
-//        for (int i : rdmnArrL){
-//            selectedLongArrL.add(longSentenceList.get(i));
-//        }
-        //for test single
+        RandomNum rdmn = new RandomNum();
+        ArrayList<Integer> rdmnArrL = rdmn.genRanNum(100,longSentenceList.size()-1);
         ArrayList<String> selectedLongArrL = new ArrayList<>();
-        selectedLongArrL.add("部分病变周围见条索影");
-        ArrayList<Integer> rdmnArrL = new ArrayList<>();
-        rdmnArrL.add(1);
+        for (int i : rdmnArrL){
+            selectedLongArrL.add(longSentenceList.get(i));
+        }
+        //for test single
+//        ArrayList<String> selectedLongArrL = new ArrayList<>();
+//        selectedLongArrL.add("左肺上叶、右肺下叶见条索状密度增高影");
+//        ArrayList<Integer> rdmnArrL = new ArrayList<>();
+//        rdmnArrL.add(1);
 
         figureExtraction.go(selectedLongArrL, excelPath, rdmnArrL);
         long endTime = System.currentTimeMillis();
@@ -41,6 +41,7 @@ public class FigureExtraction {
         columnName.add("核心部位");
         columnName.add("修饰部位");
         columnName.add("区域");
+		columnName.add("属性");
         columnName.add("可能性");
         columnName.add("性状");
         columnName.add("诊断");
@@ -81,6 +82,7 @@ public class FigureExtraction {
                     columnContent.add(se.getPrimaryLocation());
                     columnContent.add(se.getSpecificLocation());
                     columnContent.add(se.getRegion());
+					columnContent.add(se.getAttribute());
                     columnContent.add(se.getPossibility());
                     columnContent.add(se.getDescriptor());
                     columnContent.add(se.getDiagnosis());
@@ -89,6 +91,7 @@ public class FigureExtraction {
                     columnContent.add(se.getMeasureLocation());
                     columnContent.add(se.getValue());
                     columnContent.add(se.getUnit());
+
 
                     allList.add(columnContent);
                 }

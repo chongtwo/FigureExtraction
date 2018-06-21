@@ -48,7 +48,6 @@ public class RE {
 
         for (Map.Entry<Integer, Pattern> entry : exactPatMap.entrySet()) {
             Matcher m = entry.getValue().matcher(semanticSentence);
-//            Pattern p = Pattern.compile("(<PL1>PrimaryLocation#[0-9]+#)(<SL1>SpecificLocation#[0-9]+#)(<P1>Possibility#[0-9]+#)(<DP1>Descriptor#[0-9]+#)(<DG1>Diagnosis#[0-9]+#)(<CC1>coorConj#[0-9]+#)(<DP2>Descriptor#[0-9]+#)(<DG2>Diagnosis#[0-9]+#)");
             Integer patternID = entry.getKey();
             while (m.find()) {
                 isFound = true;
@@ -122,6 +121,7 @@ public class RE {
         String measureLocation = "";
         String value = "";
         String unit = "";
+        String attribute = "";
         int numOfFind = 0;
 
         HashMap<Integer,StructuredShortSentence> numMap = new HashMap<>();
@@ -136,7 +136,7 @@ public class RE {
                 for (int index = 1; index <= m.groupCount(); index++) {
                     if (m.group(index) != null) {
                         if (m.group(index).contains("PrimaryLocation")) {
-                            primaryLocation = matchedDictionary.get(m.group(index)) + ",";
+                            primaryLocation = matchedDictionary.get(m.group(index)) + ","; //覆盖的
                         } else if (m.group(index).contains("SpecificLocation")) {
                             specificLocation += matchedDictionary.get(m.group(index)) + ",";
                         } else if (m.group(index).contains("Region")) {
@@ -149,10 +149,9 @@ public class RE {
                 numMap.get(numOfFind).setSpecificLocation(specificLocation);
                 numMap.get(numOfFind).setRegion(region);
                 numOfFind++;
-                semanticSentence = m.replaceAll("#");
-                m = entry.getValue().matcher(semanticSentence);
             }
-
+            semanticSentence = m.replaceAll("#");
+            m = entry.getValue().matcher(semanticSentence);
             specificLocation = "";//清空
             region = "";
         }
@@ -178,6 +177,8 @@ public class RE {
                 value += dictEntry.getValue() + ",";
             } else if (dictEntry.getKey().contains("Unit")) {
                 unit += dictEntry.getValue() + ",";
+            } else if (dictEntry.getKey().contains("Attribute")){
+                attribute += dictEntry.getValue() + ",";
             }
         }
         //将公用的词放入各个对象中
@@ -193,6 +194,7 @@ public class RE {
             numMap.get(j).setMeasureLocation(numMap.get(j).getMeasureLocation()+measureLocation);
             numMap.get(j).setValue(numMap.get(j).getValue()+value);
             numMap.get(j).setUnit(numMap.get(j).getUnit()+unit);
+            numMap.get(j).setAttribute(numMap.get(j).getAttribute()+ attribute);
             j++;
         } while (j < numOfFind);
         return numMap;

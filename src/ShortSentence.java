@@ -69,10 +69,10 @@ public class ShortSentence {
         for (Pattern p : patterns){
             Matcher m = p.matcher(semanticSentence);
             while(m.find()){  //m.find()是一个迭代器，若一个句子中对同一个pattern匹配到多个，它会自行迭代
-                String combine = "";
-                String combineSem = "";
-                if ((patterns.indexOf(p) == 0)|(patterns.indexOf(p) ==1)|(patterns.indexOf(p) ==2)|(patterns.indexOf(p) ==3)|(patterns.indexOf(p) ==4)|(patterns.indexOf(p) ==8)){
-                    combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
+                String combine;
+                String combineSem ;
+                if ((patterns.indexOf(p) == 0)|(patterns.indexOf(p) ==1)|(patterns.indexOf(p) ==2)|(patterns.indexOf(p) ==3)|(patterns.indexOf(p) ==4)|(patterns.indexOf(p) ==8)|(patterns.indexOf(p) ==16)){
+                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
                     combineSem = "Diagnosis#0"+ String.valueOf(numOfCombine) + "#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2),combineSem);
                     matchedDictionary.put(combineSem,combine);
@@ -80,7 +80,7 @@ public class ShortSentence {
                     matchedDictionary.remove(m.group(2));
                 }
                 else if (patterns.indexOf(p) == 5 |patterns.indexOf(p) == 12 ){
-                    combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
+                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
                     combineSem = "Diagnosis#0" + String.valueOf(numOfCombine) + "#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2)+m.group(3), combineSem);
                     matchedDictionary.put(combineSem, combine);
@@ -89,7 +89,7 @@ public class ShortSentence {
                     matchedDictionary.remove(m.group(3));
                 }
                 else if((patterns.indexOf(p) == 6)|(patterns.indexOf(p) == 7)){
-                    combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
+                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
                     combineSem = "Descriptor#0" + String.valueOf(numOfCombine) + "#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2),combineSem);
                     matchedDictionary.put(combineSem, combine);
@@ -97,7 +97,7 @@ public class ShortSentence {
                     matchedDictionary.remove(m.group(2));
                 }
                 else if (patterns.indexOf(p) == 9| patterns.indexOf(p) == 13 ){
-                    combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
+                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
                     combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine)+"#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2)+m.group(3), combineSem);
                     matchedDictionary.put(combineSem, combine);
@@ -105,22 +105,30 @@ public class ShortSentence {
                     matchedDictionary.remove(m.group(2));
                     matchedDictionary.remove(m.group(3));
                 }
-                else if (patterns.indexOf(p) == 10 | patterns.indexOf(p)==14){
-                    combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
+                else if (patterns.indexOf(p)==14 | patterns.indexOf(p) == 17){
+                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
                     combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine)+"#";
                     semanticSentence = semanticSentence.replace(m.group(1)+m.group(2), combineSem);
                     matchedDictionary.put(combineSem, combine);
                     matchedDictionary.remove(m.group(1));
                     matchedDictionary.remove(m.group(2));
                 }
-//                else if (patterns.indexOf(p) == 11){
-//                    combine = combine + matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-//                    combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine)+"#";
-//                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2), combineSem);
-//                    matchedDictionary.put(combineSem, combine);
-//                    matchedDictionary.remove(m.group(1));
-//                    matchedDictionary.remove(m.group(2));
-//                }
+                else if (patterns.indexOf(p) == 11 ){ //胸腺 区 --> 主干部位
+                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
+                    combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine)+"#";
+                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2), combineSem);
+                    matchedDictionary.put(combineSem, combine);
+                    matchedDictionary.remove(m.group(1));
+                    matchedDictionary.remove(m.group(2));
+                }
+                else if(patterns.indexOf(p) == 10) { //及 胸膜 下 --> 胸膜下-主干部位
+                    combine = matchedDictionary.get(m.group(2))+ matchedDictionary.get(m.group(3));
+                    combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine) + "#";
+                    semanticSentence = semanticSentence.replace(m.group(2) + m.group(3), combineSem);
+                    matchedDictionary.put(combineSem, combine);
+                    matchedDictionary.remove(m.group(2));
+                    matchedDictionary.remove(m.group(3));
+                }
                 numOfCombine++;
 
             }

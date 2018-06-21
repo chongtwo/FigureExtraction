@@ -1,16 +1,18 @@
-(Descriptor#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/密度 影--> 诊断
+(Attribute#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/密度 影--> 诊断
 (SpecificLocation#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/淋巴结 影--> 诊断
 (Diagnosis#[0-9]+#)(DiagnosisSuffix#+[0-9]+#)/结节 影--> 诊断
 (SpecificLocation#[0-9]+#)(LocationSuffix#[0-9]+#)/肺纹理 区--> 诊断
 (Descriptor#[0-9]+#)(LocationSuffix#[0-9]+#)/透光 区 低密度 区 --> 诊断
-(Descriptor#[0-9]+#)(Change#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/密度 增高 影--> 诊断
+(Attribute#[0-9]+#)(Change#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/密度 增高 影--> 诊断
 (Descriptor#[0-9]+#)(DescriptorSuffix#[0-9]+#)/条絮 样--> 性状
 (Diagnosis#[0-9]+#)(DescriptorSuffix#[0-9]+#)/结节 状-->性状
 (PrimaryLocation#[0-9]+#)(DiagnosisSuffix#[0-9]+#)/支气管 影-->诊断
 (LocConj#[0-9]+#)(PrimaryLocation#[0-9]+#)(LocationSuffix#[0-9]+#)/近 胸膜 处-->细节部位
-(PrimaryLocation#[0-9]+#)(LocConj#[0-9]+#)/胸膜 下-->细节部位；纵隔 旁
+(coorConj#[0-9]+#)(PrimaryLocation#[0-9]+#)(LocConj#[0-9]+#)/及 胸膜 下-->主干部位
 (PrimaryLocation#[0-9]+#)(LocationSuffix#[0-9]+#)/胸腺 区-->主干部位
 (Descriptor#[0-9]+#)(Change#[0-9]+#)(LocationSuffix#[0-9]+#)/透光 增强 区-->诊断
 (LocConj#[0-9]+#)(Region#[0-9]+#)(PrimaryLocation#[0-9]+#)/与 邻近 胸膜-->细节部位
 (LocConj#[0-9]+#)(PrimaryLocation#[0-9]+#)/近 斜裂胸膜-->细节部位
 (LocConj#[0-9]+#)(PrimaryLocation#[0-9]+#)(LocConj#[0-9]+#)/近 斜裂胸膜 下 -->细节部位
+(Descriptor#[0-9]+#)(DiagnosisSuffix#+[0-9]+#)/高密度 影 --> 诊断
+(PrimaryLocation#[0-9]+#)(LocConj#[0-9]+#)/胸膜 下-->细节部位；纵隔 旁

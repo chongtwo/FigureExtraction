@@ -11,7 +11,15 @@ public class StructuredShortSentence {
     private String measureLocation = "";
     private String value ="";
     private String unit="";
+    private String attribute="";
 
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
 
     public String getPrimaryLocation() {
         return primaryLocation;
