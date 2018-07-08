@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class RMM {
     private static StringBuilder result=new StringBuilder(); //存放分词结果，其实也不应该放在属性这里
     private static final int MAXLEN=6; //最大字符数
+//	private static final int MAXLEN=7; //for LHM
     private static int len=MAXLEN; //取词长度
     private static int curIndex=0; //当前下标
     private static String dictPath = ".\\static\\term.txt";
@@ -18,7 +19,7 @@ public class RMM {
     public static void main(String[] args) {
 //        Scanner scanner=new Scanner(System.in);
 //        String sentence=scanner.next();
-        String sentence = "双肺野清晰，";
+        String sentence = "    1、肺动脉峰值流速0.85M/S。主动脉峰值流速0.16M/S。 ";
         MatchResult matchResult = maxMatching(sentence,true);
         System.out.println(matchResult.semanticSentence);
     }
@@ -79,8 +80,6 @@ public class RMM {
                 e.printStackTrace();
             }
         }
-//        //匹配阿拉伯数字
-//        semanticResult = FigureMatch.figureMatch(semanticResult);
 
         matchResult.semanticSentence = semanticResult; //matchResult.matchedDictionary = null 没有序号的反向词典是无法建立的
         return matchResult;

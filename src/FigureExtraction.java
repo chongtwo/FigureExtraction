@@ -1,4 +1,3 @@
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -7,21 +6,27 @@ public class FigureExtraction {
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
         FigureExtraction figureExtraction = new FigureExtraction();
-        ArrayList<String> longSentenceList = TxtOperator.readTxt("D:\\JavaApp\\FigureExtraction\\out\\YingSentenceTypeCount2018-06-12-16-23-41.txt");
+//        ArrayList<String> longSentenceList = TxtOperator.readTxt(".\\static2\\sourcefile.txt");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String excelPath = "./out/ying_result"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
+        String excelPath = "./out/LHMresult"+ String.valueOf(dateFormat.format(new Date())) + ".xlsx";
         //产生100个随机数，并选出句子
-        RandomNum rdmn = new RandomNum();
-        ArrayList<Integer> rdmnArrL = rdmn.genRanNum(100,longSentenceList.size()-1);
-        ArrayList<String> selectedLongArrL = new ArrayList<>();
-        for (int i : rdmnArrL){
-            selectedLongArrL.add(longSentenceList.get(i));
-        }
-        //for test single
+//        RandomNum rdmn = new RandomNum();
+//        ArrayList<Integer> rdmnArrL = rdmn.genRanNum(100,longSentenceList.size()-1);
 //        ArrayList<String> selectedLongArrL = new ArrayList<>();
-//        selectedLongArrL.add("左肺上叶、右肺下叶见条索状密度增高影");
-//        ArrayList<Integer> rdmnArrL = new ArrayList<>();
-//        rdmnArrL.add(1);
+//        for (int i : rdmnArrL){
+//            selectedLongArrL.add(longSentenceList.get(i));
+//        }
+        //for whole test
+//        ArrayList<String> selectedLongArrL = longSentenceList;
+//        ArrayList<Integer> rdmnArrL = new ArrayList<>(longSentenceList.size());
+//        for (int i = 0; i < longSentenceList.size();i++){
+//            rdmnArrL.add(i);
+//        }
+        //for test single
+        ArrayList<String> selectedLongArrL = new ArrayList<>();
+        selectedLongArrL.add("胸廓对称；左肺见弥漫絮状、斑片状密度增高影，边界不清，部分病变致密，内见支气管充气征，邻近处见两个类圆形结节影。左肺上叶尖后段另见条索状密度增高影及点状高密度影，边界清楚。右肺上叶尖段见絮状密度增高影，密度浅淡，边界模糊。右肺上叶支气管局部扩张；气管居中，支气管及左、右主支气管开口通畅；双肺门未见增大；心脏形态未见异常，纵隔见多个淋巴结增大，内见钙化。左侧后胸壁下见弧形液体样低密度影。");
+        ArrayList<Integer> rdmnArrL = new ArrayList<>();
+        rdmnArrL.add(1);
 
         figureExtraction.go(selectedLongArrL, excelPath, rdmnArrL);
         long endTime = System.currentTimeMillis();
@@ -52,32 +57,31 @@ public class FigureExtraction {
         columnName.add("单位");
         xlsOperator.writeXls(excelPath, columnName);
 
-        String[] punctuationList = {"。", "，", "；",",", ";"};
-
 //        deprecated.RelationExtraction re = new deprecated.RelationExtraction();
-        RE re = new RE();
+
         int end = longSentenceList.size();
         for (String longS : longSentenceList.subList(0,end)) {
             numOfLong++;
             int numOfShort = 0;
             System.out.println(String.valueOf("长句编号：" + numOfLong));
             LongSentence longSentence = new LongSentence(longS);
-            longSentence.segToShort(punctuationList);
+            longSentence.segToShort(LongSentence.UNIT_SHORT_SENTENCE);
             HashMap<Integer, StructuredShortSentence> numMap;
             for (ShortSentence ss : longSentence.getShortSentences()) {
-                ss.content = ss.content.split("\t")[0]; //针对有统计数量的输入文本，只取前面的原句，舍弃后面的统计数字
+                RE re = new RE(); // ！！！位置
+                ss.setContent( ss.getContent().split("\t")[0]); //针对有统计数量的输入文本，只取前面的原句，舍弃后面的统计数字
                 numOfShort++;
                 System.out.println("短句编号：" + numOfShort);
                 ss.match();
-                ss.combineWord();
-                numMap = re.relationExtract(ss.semanticSentence, ss.matchedDictionary);
+                ss = re.combineWord(ss);
+                numMap = re.relationExtract(ss.getSemanticSentence(), ss.getMatchedDictionary());
 
                 ArrayList<String> columnContent;
                 for(Map.Entry<Integer, StructuredShortSentence> entry : numMap.entrySet()){
                     columnContent = new ArrayList<>();
                     columnContent.add(String.valueOf(selectedNumArrL.get(numOfLong-1)));
-                    columnContent.add(ss.content);
-                    columnContent.add(ss.semanticSentence);
+                    columnContent.add(ss.getContent());
+                    columnContent.add(ss.getSemanticSentence());
                     StructuredShortSentence se = entry.getValue();
                     columnContent.add(se.getPrimaryLocation());
                     columnContent.add(se.getSpecificLocation());
@@ -92,22 +96,8 @@ public class FigureExtraction {
                     columnContent.add(se.getValue());
                     columnContent.add(se.getUnit());
 
-
                     allList.add(columnContent);
                 }
-
-//                //打印关系抽取后的结果
-//                for (Map.Entry<Integer, StructuredShortSentence> entry : numMap.entrySet()) {
-//                    Field[] field = entry.getValue().getClass().getDeclaredFields();//获取实体的类的所有属性，返回Field数组
-//                    for (int i = 0; i < field.length; i++) {
-//                        try {
-//                            Object value = field[i].get(entry.getValue());//类的第i个属性去获得某对象的该属性值
-//                            System.out.println(field[i].getName() + ":" + value);
-//                        } catch (IllegalAccessException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
             }
         }
         xlsOperator.writeXls(excelPath, allList);

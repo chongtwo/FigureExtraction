@@ -6,32 +6,117 @@ import java.util.regex.Pattern;
 
 public class RE {
 
-    private HashMap<Integer, Pattern> bodyPartPatMap;
-    private HashMap<Integer, Pattern> exactPatMap;
+    static private HashMap<Integer, Pattern> bodyPartPatMap;
+    static private HashMap<Integer, Pattern> exactPatMap;
+    static private HashMap<Integer, Pattern> combinePatMap;
     boolean isFound = false;
 
+    public RE(){
+    	compilePattern();
+	}
 
-    private void compilePattern() {
-        bodyPartPatMap = new HashMap<>();
-        exactPatMap = new HashMap<>();
-        ArrayList<String> bodyPartStrList = TxtOperator.readTxt(".//static//bodyPart.txt");
-        ArrayList<String> exactStrList = TxtOperator.readTxt(".//static//exact.txt");
+	private void compilePattern() {
+		String bodyPartPath = ".//static//bodyPart.txt";
+		String exactMatchPath = ".//static//exact.txt";
+		String combineRulePath = ".//static//combine_rule.txt";
 
-        for (String str : bodyPartStrList) {
-            Integer patternID = Integer.valueOf(str.split(" ")[0]);
-            Pattern patternContent = Pattern.compile(str.split(" ")[1]);
-            bodyPartPatMap.put(patternID, patternContent);
-        }
+		bodyPartPatMap = doCompile(bodyPartPath);
+		exactPatMap = doCompile(exactMatchPath);
+		combinePatMap = doCompile(combineRulePath);
+	}
+	private HashMap<Integer, Pattern> doCompile(String path){
+		ArrayList<String> StrList = TxtOperator.readTxt(path);
+		HashMap<Integer, Pattern> patMap = new HashMap<>();
+		for (String str: StrList){
+			Integer patternId = Integer.valueOf(str.split(" ")[0]);
+			Pattern patternContent = Pattern.compile(str.split(" ")[1]);
+			patMap.put(patternId, patternContent);
+		}
+		return  patMap;
+	}
 
-        for (String str : exactStrList) {
-            Integer patternID = Integer.valueOf(str.split(" ")[0]);
-            Pattern patternContent = Pattern.compile(str.split(" ")[1]);
-            exactPatMap.put(patternID, patternContent);
-        }
-    }
+	public ShortSentence combineWord(ShortSentence ss) {
+		int numOfCombine = 0;
+		for (Map.Entry<Integer, Pattern> entry : combinePatMap.entrySet()) {
+			Pattern p = entry.getValue();
+			Integer patternID = entry.getKey();
+			Matcher m = p.matcher(ss.getSemanticSentence());
+			while (m.find()) {  //m.find()是一个迭代器，若一个句子中对同一个pattern匹配到多个，它会自行迭代
+				String combine;
+				String combineSem;
+				if ((patternID == 1) | (patternID == 2) | (patternID == 3) | (patternID == 4) | (patternID == 5) | (patternID == 9) | (patternID == 17)) {
+					combine = ss.matchedDictionary.get(m.group(1)) + ss.getMatchedDictionary().get(m.group(2));
+					combineSem = "Diagnosis#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1) + m.group(2), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(1));
+					ss.matchedDictionary.remove(m.group(2));
+				} else if (patternID == 6 | patternID == 13) {
+					combine = ss.matchedDictionary.get(m.group(1)) + ss.matchedDictionary.get(m.group(2)) + ss.matchedDictionary.get(m.group(3));
+					combineSem = "Diagnosis#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1) + m.group(2) + m.group(3), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(1));
+					ss.matchedDictionary.remove(m.group(2));
+					ss.matchedDictionary.remove(m.group(3));
+				} else if ((patternID == 7) | (patternID == 8)) {
+					combine = ss.matchedDictionary.get(m.group(1)) + ss.matchedDictionary.get(m.group(2));
+					combineSem = "Descriptor#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1) + m.group(2), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(1));
+					ss.matchedDictionary.remove(m.group(2));
+				} else if (patternID == 10 | patternID == 14) {
+					combine = ss.matchedDictionary.get(m.group(1)) + ss.matchedDictionary.get(m.group(2)) + ss.matchedDictionary.get(m.group(3));
+					combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1) + m.group(2) + m.group(3), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(1));
+					ss.matchedDictionary.remove(m.group(2));
+					ss.matchedDictionary.remove(m.group(3));
+				} else if (patternID == 15 | patternID == 20) {
+					combine = ss.matchedDictionary.get(m.group(1)) + ss.matchedDictionary.get(m.group(2));
+					combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1) + m.group(2), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(1));
+					ss.matchedDictionary.remove(m.group(2));
+				} else if (patternID == 12 | patternID == 18) { //胸腺 区 --> 主干部位；主支气管 旁 --> 主支气管旁 - 主干部位
+					combine = ss.matchedDictionary.get(m.group(1)) + ss.matchedDictionary.get(m.group(2));
+					combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1) + m.group(2), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(1));
+					ss.matchedDictionary.remove(m.group(2));
+				} else if (patternID == 11) { //及 胸膜 下 --> 胸膜下-主干部位
+					combine = ss.matchedDictionary.get(m.group(2)) + ss.matchedDictionary.get(m.group(3));
+					combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(2) + m.group(3), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(2));
+					ss.matchedDictionary.remove(m.group(3));
+				} else if(patternID == 19){ //主动脉弓 旁 及 下
+					combine = ss.matchedDictionary.get(m.group(1))+ ss.matchedDictionary.get(m.group(2));
+					combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1) + m.group(2), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					numOfCombine++;
+					combine = ss.matchedDictionary.get(m.group(1)) + ss.matchedDictionary.get(m.group(4));
+					combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine) + "#";
+					ss.semanticSentence = ss.semanticSentence.replace(m.group(1)+ m.group(4), combineSem);
+					ss.matchedDictionary.put(combineSem, combine);
+					ss.matchedDictionary.remove(m.group(1));
+					ss.matchedDictionary.remove(m.group(2));
+					ss.matchedDictionary.remove(m.group(4));
+				}
+				numOfCombine++;
+			}
+		}
+		return ss;
+	}
+
 
     public HashMap<Integer,StructuredShortSentence> relationExtract(String semanticSentence, HashMap<String, String> matchedDictionary) {
-        compilePattern();
         //先精准匹配
         HashMap<Integer, StructuredShortSentence> numMap = exactRE(semanticSentence, matchedDictionary);
         //精准匹配没有匹配到，再进行部位匹配
@@ -41,12 +126,16 @@ public class RE {
         return numMap;
     }
 
+	/**
+	 * 精准匹配
+	 * @param semanticSentence
+	 * @param matchedDictionary
+	 * @return
+	 */
     public HashMap<Integer,StructuredShortSentence> exactRE(String semanticSentence, HashMap<String, String> matchedDictionary){
-
         HashMap<Integer,StructuredShortSentence> numMap = new HashMap<>();
-//        numMap.put(0, new StructuredShortSentence());//先初始化，避免m.find为空时(句子缺少主干部位时)的空指针，如果m.find不为空，numMap.put将会覆盖该条
-
-        for (Map.Entry<Integer, Pattern> entry : exactPatMap.entrySet()) {
+		numMap.put(0, new StructuredShortSentence());//先初始化，避免m.find为空时(句子缺少主干部位时)的空指针，如果m.find不为空，numMap.put将会覆盖该条
+		for (Map.Entry<Integer, Pattern> entry : exactPatMap.entrySet()) {
             Matcher m = entry.getValue().matcher(semanticSentence);
             Integer patternID = entry.getKey();
             while (m.find()) {

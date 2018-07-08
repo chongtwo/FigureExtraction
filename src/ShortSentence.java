@@ -10,6 +10,26 @@ public class ShortSentence {
     public String semanticSentence;
     public HashMap<String, String> matchedDictionary = new HashMap<>();
 
+    public String getContent() {
+        return content;
+    }
+
+    public String getSemanticSentence() {
+        return semanticSentence;
+    }
+
+    public void setSemanticSentence(String semanticSentence) {
+        this.semanticSentence = semanticSentence;
+    }
+
+    public HashMap<String, String> getMatchedDictionary() {
+        return matchedDictionary;
+    }
+
+    public void setMatchedDictionary(HashMap<String, String> matchedDictionary) {
+        this.matchedDictionary = matchedDictionary;
+    }
+
 
     public void setContent(String value){
         content = value;
@@ -20,30 +40,32 @@ public class ShortSentence {
         //预处理，忽略“同。。。比较：”“复查：”等
         String postContent = content;
         ArrayList<String> ignoreKey = new ArrayList();
+        ignoreKey.add("复查示");
         ignoreKey.add("复查");
         ignoreKey.add("比较");
         ignoreKey.add("片示");
+        ignoreKey.add("对比");
 
+		postContent = content;
         for (String ignoreWord : ignoreKey){
-            if (content.contains(ignoreWord)){
-                int startIndex = content.indexOf(ignoreWord) + ignoreWord.length()+1;
-                postContent = content.substring(startIndex);
+            if (postContent.contains(ignoreWord)){
+                int startIndex = content.indexOf(ignoreWord) + ignoreWord.length()+ 1; //实际需处理的词从ignoreKey之后第二个开始算，之后第一个往往是冒号等标点符号
+                try{
+                    postContent = content.substring(startIndex);
+                }catch (StringIndexOutOfBoundsException e){ //防止ignoreKey作为句尾词
+                    postContent = "";
+                }
             }
         }
-
-//        if(content.contains("复查")|content.contains("比较")|content.contains("片示")){
-//            int startIndex = content.indexOf("复查") + 3;
-//            postContent = content.substring(startIndex);
-//        }
-//        if(content.contains("复查：")|content.contains("比较：")|content.contains("现片示：")){
-//            String[] conList = content.split("：");
-//            int last = conList.length-1;
-//            postContent = conList[last];
-//        }
-
+        //反向最大匹配
         MatchResult matchResult = RMM.maxMatching(postContent, true);
         //匹配阿拉伯数字
         MatchResult figureResult = FigureMatch.figureMatch(matchResult.semanticSentence, true);
+
+        //for LHM
+//        ArrayList<MatchResult> piars = FigureMatch.pairMatch(matchResult.semanticSentence);
+        //end for LHM
+
 
         semanticSentence = matchResult.semanticSentence;
         matchedDictionary = matchResult.matchedDictionary;
@@ -51,91 +73,8 @@ public class ShortSentence {
         for (Map.Entry<String, String> entry: figureResult.matchedDictionary.entrySet()){
             matchedDictionary.put(entry.getKey(),entry.getValue());
         }
+
+        //for LHM
+
     }
-
-
-    public void combineWord(){
-        int numOfCombine = 0;
-        ArrayList<Pattern> patterns = new ArrayList<Pattern>();
-        String ruleFilePath = ".\\static\\combine_rule.txt";
-        ArrayList<String> rules = TxtOperator.readTxt(ruleFilePath);
-        //把rules中的每条rulecomplie好,放到另一个ArrayList中
-        for (String r : rules) {
-            r = r.split("/")[0];
-            Pattern p = Pattern.compile(r);
-            patterns.add(p);
-        }
-
-        for (Pattern p : patterns){
-            Matcher m = p.matcher(semanticSentence);
-            while(m.find()){  //m.find()是一个迭代器，若一个句子中对同一个pattern匹配到多个，它会自行迭代
-                String combine;
-                String combineSem ;
-                if ((patterns.indexOf(p) == 0)|(patterns.indexOf(p) ==1)|(patterns.indexOf(p) ==2)|(patterns.indexOf(p) ==3)|(patterns.indexOf(p) ==4)|(patterns.indexOf(p) ==8)|(patterns.indexOf(p) ==16)){
-                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-                    combineSem = "Diagnosis#0"+ String.valueOf(numOfCombine) + "#";
-                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2),combineSem);
-                    matchedDictionary.put(combineSem,combine);
-                    matchedDictionary.remove(m.group(1));
-                    matchedDictionary.remove(m.group(2));
-                }
-                else if (patterns.indexOf(p) == 5 |patterns.indexOf(p) == 12 ){
-                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
-                    combineSem = "Diagnosis#0" + String.valueOf(numOfCombine) + "#";
-                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2)+m.group(3), combineSem);
-                    matchedDictionary.put(combineSem, combine);
-                    matchedDictionary.remove(m.group(1));
-                    matchedDictionary.remove(m.group(2));
-                    matchedDictionary.remove(m.group(3));
-                }
-                else if((patterns.indexOf(p) == 6)|(patterns.indexOf(p) == 7)){
-                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-                    combineSem = "Descriptor#0" + String.valueOf(numOfCombine) + "#";
-                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2),combineSem);
-                    matchedDictionary.put(combineSem, combine);
-                    matchedDictionary.remove(m.group(1));
-                    matchedDictionary.remove(m.group(2));
-                }
-                else if (patterns.indexOf(p) == 9| patterns.indexOf(p) == 13 ){
-                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2)) + matchedDictionary.get(m.group(3));
-                    combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine)+"#";
-                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2)+m.group(3), combineSem);
-                    matchedDictionary.put(combineSem, combine);
-                    matchedDictionary.remove(m.group(1));
-                    matchedDictionary.remove(m.group(2));
-                    matchedDictionary.remove(m.group(3));
-                }
-                else if (patterns.indexOf(p)==14 | patterns.indexOf(p) == 17){
-                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-                    combineSem = "SpecificLocation#0" + String.valueOf(numOfCombine)+"#";
-                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2), combineSem);
-                    matchedDictionary.put(combineSem, combine);
-                    matchedDictionary.remove(m.group(1));
-                    matchedDictionary.remove(m.group(2));
-                }
-                else if (patterns.indexOf(p) == 11 ){ //胸腺 区 --> 主干部位
-                    combine = matchedDictionary.get(m.group(1)) + matchedDictionary.get(m.group(2));
-                    combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine)+"#";
-                    semanticSentence = semanticSentence.replace(m.group(1)+m.group(2), combineSem);
-                    matchedDictionary.put(combineSem, combine);
-                    matchedDictionary.remove(m.group(1));
-                    matchedDictionary.remove(m.group(2));
-                }
-                else if(patterns.indexOf(p) == 10) { //及 胸膜 下 --> 胸膜下-主干部位
-                    combine = matchedDictionary.get(m.group(2))+ matchedDictionary.get(m.group(3));
-                    combineSem = "PrimaryLocation#0" + String.valueOf(numOfCombine) + "#";
-                    semanticSentence = semanticSentence.replace(m.group(2) + m.group(3), combineSem);
-                    matchedDictionary.put(combineSem, combine);
-                    matchedDictionary.remove(m.group(2));
-                    matchedDictionary.remove(m.group(3));
-                }
-                numOfCombine++;
-
-            }
-        }
-//        for(Map.Entry<String, String> entry : matchedDictionary.entrySet()){
-//            System.out.println(entry.getKey()+":"+ entry.getValue());
-//        }
-    }
-
 }

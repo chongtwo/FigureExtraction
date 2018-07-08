@@ -5,6 +5,9 @@ public class LongSentence {
     private ArrayList<ShortSentence> shortSentences = new ArrayList<>();
     private String content;
     private int numOfShortSentences;
+    static String[] UNIT_REPORT = {};
+    static String[] UNIT_LONG_SENTENCE = {"。"};
+    static String[] UNIT_SHORT_SENTENCE = {"。", "，", "；",",", ";"};
 
     public ArrayList<ShortSentence> getShortSentences() {
         return shortSentences;
@@ -40,13 +43,7 @@ public class LongSentence {
         for (String punc : punctuationList){
             content = content.replace(punc, punc+"\n");
         }
-//        content = content.replace("。","。\n");
-//                .replace("，”", "，”\n")
-//                .replace("，","，\n")
-//                .replace("；","；\n")
-//                .replace(",", ",\n")
-//                .replace(";",";\n");
-        String[] shortSentenceList = content.split("\n");//?
+        String[] shortSentenceList = content.split("\n");//将上述循环中替换的标点分割成列表
         numOfShortSentences = shortSentenceList.length;
 
         for (int i = 0 ; i < shortSentenceList.length ; i++){

@@ -9,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.omg.CORBA.OBJ_ADAPTER;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -145,6 +146,27 @@ public class XlsOperator {
             e.printStackTrace();
         }
     }
+
+
+    public void map2xls (String path, ArrayList<HashMap<Integer, String>> arrayListArrayList){
+        System.out.println("开始写入文件>>>>>>>");
+        try{
+            for (int i = 0 ; i < arrayListArrayList.size() ; i++){
+                Row row = sheet.createRow(i + rowIndex);
+                for (Map.Entry singleRowMap : arrayListArrayList.get(i).entrySet()){
+                    Cell cell = row.createCell((int)singleRowMap.getKey());
+                    cell.setCellValue(String.valueOf(singleRowMap.getValue()));
+                }
+            }
+            FileOutputStream fos = new FileOutputStream(path);
+            workbook.write(fos);
+            fos.close();
+            System.out.println("主表数据写入完成>>>>>>");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     public void writeXls(String path, List list){
 
