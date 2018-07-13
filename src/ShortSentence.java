@@ -33,7 +33,7 @@ public class ShortSentence {
 
     public void setContent(String value){
         content = value;
-        semanticSentence = content;
+//        semanticSentence = content;
     }
 
     public void match(){ //把MM单独成类的好处是：换match方法时更方便

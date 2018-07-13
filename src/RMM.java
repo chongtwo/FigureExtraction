@@ -41,7 +41,7 @@ public class RMM {
         return matchResult;
     }
 
-    private static MatchResult noNumberedMM(String sentence) {
+    public static MatchResult noNumberedMM(String sentence) {
 
         NewWords newWords = new NewWords();
         String semanticResult = "";
@@ -59,9 +59,9 @@ public class RMM {
                 else{
                     subStr=sentence.substring(curIndex-len,curIndex);
                 }
-                String string; //整句话
-                while ((string=br.readLine())!=null){ //br.readLine()每次读一个词
-                    String[]  line=string.split("\t");
+                String termRecord;
+                while ((termRecord=br.readLine())!=null){ //br.readLine()每次读一个词
+                    String[]  line=termRecord.split("\t");
                     if (line[0].equals(subStr)){
                         semanticResult = line[1] + semanticResult;
                         curIndex-=len;
@@ -113,9 +113,9 @@ public class RMM {
                 else{
                     subStr=sentence.substring(curIndex-len, curIndex);
                 }
-                String string; //整句话
-                while ((string=br.readLine())!=null){ //br.readLine()每次读一个词
-                    String[]  line=string.split("\t");
+                String termRecord; //整句话
+                while ((termRecord=br.readLine())!=null){ //br.readLine()每次读一个词
+                    String[]  line=termRecord.split("\t");
                     if (line[0].equalsIgnoreCase(subStr)){
                         result.append(subStr).append("/");
                         semanticResult = line[1]+ "#" + String.valueOf(numOfMatched) + "#" + semanticResult;
