@@ -1,3 +1,5 @@
+package util;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,10 +27,10 @@ public class FindWords {
     }
 
     public static void main(String[] args) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-util.MM-dd-HH-mm-ss");
         Date date = new Date();
         String readPath = ".\\out\\SentenceTypeCount2018-05-07-13-39-29.txt";
-        String outPath = ".\\out\\FindWords" + simpleDateFormat.format(date) +".txt";
+        String outPath = ".\\out\\util.FindWords" + simpleDateFormat.format(date) +".txt";
         FindWords findWords = new FindWords();
         String wantFind = "影";
         findWords.find(readPath, outPath, wantFind);

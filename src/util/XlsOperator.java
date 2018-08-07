@@ -1,18 +1,16 @@
+package util;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.omg.CORBA.OBJ_ADAPTER;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.*;
 
 
@@ -26,7 +24,7 @@ public class XlsOperator {
         String path = "C:\\\\Users\\\\W\\\\Desktop\\\\新建 Microsoft Excel 97-2003 工作表.xls";
 //        String path = "C:/Users/W/Desktop/新建 Microsoft Excel 工作表.xlsx";
         XlsOperator test = new XlsOperator();
-//        HashMap<Integer, ArrayList<String>> xlsRead = XlsOperator.readXls(path);
+//        HashMap<Integer, ArrayList<String>> xlsRead = util.XlsOperator.readXls(path);
 //        System.out.println(xlsRead);
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("a");
@@ -75,7 +73,6 @@ public class XlsOperator {
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             //log.warn(e);
         }
@@ -91,33 +88,45 @@ public class XlsOperator {
      * @param columnIndex
      * @return
      */
-    public ArrayList<String> readXls(String path, int sheetIndex, int columnIndex) throws IOException {
+    public static ArrayList<String> readXls(String path, int sheetIndex, int columnIndex) throws Exception{
         FileInputStream is = new FileInputStream(path);
         HSSFWorkbook excel = new HSSFWorkbook(is);
         ArrayList<String> list = new ArrayList<>();
-        try{
-            //获取第sheetIndex个sheet
-            HSSFSheet sheet = excel.getSheetAt(sheetIndex);
+        //获取第sheetIndex个sheet
+        HSSFSheet sheet = excel.getSheetAt(sheetIndex);
 
-
-            //行读取循环
-            for (Iterator rowIterator = sheet.iterator(); rowIterator.hasNext();)
-            {
-                HSSFRow row = (HSSFRow) rowIterator.next();
-                //读取固定列
-                HSSFCell cell = (HSSFCell) row.getCell(columnIndex);
-                list.add(cell.getStringCellValue());
-
-            }
-        }
-        catch (Exception e)
+        //行读取循环
+        for (Iterator rowIterator = sheet.iterator(); rowIterator.hasNext();)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            //log.warn(e);
+            HSSFRow row = (HSSFRow) rowIterator.next();
+            //读取固定列
+            HSSFCell cell = (HSSFCell) row.getCell(columnIndex);
+            list.add(cell.getStringCellValue());
         }
         return list;
+    }
 
+    public static HashMap<String, String> readXlsWithRowNum(String path, int sheetIndex, int columnIndex) throws IOException {
+        FileInputStream is = new FileInputStream(path);
+        XSSFWorkbook excel = new XSSFWorkbook(is);
+        HashMap<String, String> map = new HashMap<>();
+        //获取第sheetIndex个sheet
+        XSSFSheet sheet = excel.getSheetAt(sheetIndex);
+
+        //行读取循环
+        for (Iterator rowIterator = sheet.iterator(); rowIterator.hasNext();)
+        {
+            XSSFRow row = (XSSFRow) rowIterator.next();
+            //读取固定列
+            XSSFCell cell = (XSSFCell) row.getCell(columnIndex);
+            try {
+                map.put(String.valueOf(row.getRowNum()), cell.getStringCellValue());
+//                System.out.println(row.getRowNum());
+            }catch (RuntimeException e){
+//                e.printStackTrace();
+            }
+        }
+        return map;
     }
 
 

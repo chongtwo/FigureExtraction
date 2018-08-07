@@ -1,4 +1,4 @@
-
+package util;
 
 
 import java.text.SimpleDateFormat;
@@ -22,9 +22,9 @@ public class SemanticTypeCount{
 //        longSentenceList.add("与邻近胸膜粘连；");
 
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-util.MM-dd-HH-mm-ss");
         Date date = new Date();
-        String outPath = ".\\out\\SemanticTypeCount"+ String.valueOf(dateFormat.format(date))+".txt";
+        String outPath = ".\\out\\util.SemanticTypeCount"+ String.valueOf(dateFormat.format(date))+".txt";
         String unrecordedPath = ".\\out\\unrecordedWord"+ String.valueOf(dateFormat.format(date)) +".txt";
         String distinctSentencePath = ".\\out\\distinctSentence"+ String.valueOf(dateFormat.format(date)) + ".txt";
 

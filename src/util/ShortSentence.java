@@ -1,8 +1,8 @@
+package util;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ShortSentence {
 
@@ -62,9 +62,9 @@ public class ShortSentence {
         //匹配阿拉伯数字
         MatchResult figureResult = FigureMatch.figureMatch(matchResult.semanticSentence, true);
 
-        //for LHM
-//        ArrayList<MatchResult> piars = FigureMatch.pairMatch(matchResult.semanticSentence);
-        //end for LHM
+        //for util.LHM
+//        ArrayList<util.MatchResult> piars = util.FigureMatch.pairMatch(matchResult.semanticSentence);
+        //end for util.LHM
 
 
         semanticSentence = matchResult.semanticSentence;
@@ -74,7 +74,7 @@ public class ShortSentence {
             matchedDictionary.put(entry.getKey(),entry.getValue());
         }
 
-        //for LHM
+        //for util.LHM
 
     }
 }

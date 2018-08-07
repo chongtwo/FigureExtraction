@@ -1,3 +1,5 @@
+package util;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -22,7 +24,7 @@ public class TxtOperator {
         return lineList;
     }
 
-    static void writeTxt(String path, String content) {
+    public static void writeTxt(String path, String content) {
         try{
             File file = new File(path);
             file.createNewFile();

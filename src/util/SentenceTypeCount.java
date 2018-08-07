@@ -1,3 +1,5 @@
+package util;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class SentenceTypeCount {
      * @param punctuationList
      */
     public void count(String readPath, String outPath, String[] punctuationList){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-util.MM-dd-HH-mm-ss");
         Date date = new Date();
         outPath = outPath + String.valueOf(dateFormat.format(date))+".txt";
         ArrayList<String> longSentenceList = TxtOperator.readTxt(readPath);
@@ -39,7 +41,7 @@ public class SentenceTypeCount {
             for (ShortSentence ss : ls.getShortSentences()){
 //                 //for long sentence type count & contain keywords
 //                if (longSentence.contains("影")) {
-//                ShortSentence ss = new ShortSentence();
+//                util.ShortSentence ss = new util.ShortSentence();
 //                ss.setContent(longSentence.split("\t")[0]);
                     int num;
                     //判断最后一个字符是否是标点，是就去掉，不是则保留

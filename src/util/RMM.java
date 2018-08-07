@@ -1,3 +1,5 @@
+package util;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,14 +9,16 @@ import java.util.HashMap;
 
 public class RMM {
     private static StringBuilder result=new StringBuilder(); //存放分词结果，其实也不应该放在属性这里
-    private static final int MAXLEN=6; //最大字符数
-//	private static final int MAXLEN=7; //for LHM
-    private static int len=MAXLEN; //取词长度
+//    private static final int MAXLEN=6; //最大字符数
+//    private static String dictPath = ".\\static\\term.txt";
     private static int curIndex=0; //当前下标
-    private static String dictPath = ".\\static\\term.txt";
     static ArrayList<String> unrecordedWordList = new ArrayList<>();//词表中未登录的词
     static MatchResult matchResult = new MatchResult();
 
+    private static String dictPath = ".\\static2\\term.txt";
+    private static final int MAXLEN=7; //for util.LHM
+
+    private static int len=MAXLEN; //取词长度
 
     public static void main(String[] args) {
 //        Scanner scanner=new Scanner(System.in);

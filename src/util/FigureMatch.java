@@ -1,5 +1,6 @@
+package util;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,9 +18,23 @@ public class FigureMatch {
      * @return
      */
     public static ArrayList<MatchResult> pairMatch(MatchResult mr){
-        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)(?:约)?(?:为)?(?:Φ)?(\\s*)(?<value>(?:-)?\\d+(?:\\.\\d+)?(?:(\\+|x|×|、|~|-|—)\\d+(?:\\.\\d+)?)?(?:(x|×|、|~)\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)?");
-        Matcher m = quantifierPattern.matcher(mr.semanticSentence);
+
         ArrayList<MatchResult> matchResultArrayList = new ArrayList<>();
+
+        Pattern SVPattern = Pattern.compile("SV置于(?<SVP>.*?)见.*?(?<measureLocation>MeasureLocation#[0-9]+#)");
+        Matcher msv = SVPattern.matcher(mr.semanticSentence);
+        while (msv.find()){
+            System.out.println("find");
+            MatchResult matchResult = new MatchResult();
+            if(msv.group("SVP") != null){
+                matchResult.matchedDictionary.put("SVplace",msv.group("SVP"));
+            }
+            matchResultArrayList.add(matchResult);
+        }
+
+
+        Pattern quantifierPattern = Pattern.compile("(?<measureLocation>MeasureLocation#[0-9]+#)(?::)?(?:Φ)?(\\s*)(?<value>(?:-)?\\d+(?:\\.\\d+)?(?:(\\+|x|×|、|~|-|—)\\d+(?:\\.\\d+)?)?(?:(x|×|、|~)\\d+(?:\\.\\d+)?)?)(?<unit>Unit#[0-9]+#)?");
+        Matcher m = quantifierPattern.matcher(mr.semanticSentence);
         int numOfFind = 0;
         while(m.find()){
             MatchResult matchResult = new MatchResult();

@@ -1,3 +1,5 @@
+package util;
+
 public class StructuredShortSentence {
 
     private String primaryLocation = "";
